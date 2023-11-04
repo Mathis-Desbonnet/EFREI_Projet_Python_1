@@ -1,3 +1,6 @@
+#TODO : TF-IDF functions
+#TODO : IDF function
+
 def occurrenceOfWords(text : str, word : str):
     """
     Returns the number of occurrences of a word in a text.
