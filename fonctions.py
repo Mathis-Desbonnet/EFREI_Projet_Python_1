@@ -7,7 +7,7 @@ def getPresidentNames(folderAdrr : str="./speeches/"):
         for chr in presidentsFileName[i]:
             if chr.isdigit():
                 presidentsFileName[i] = presidentsFileName[i].replace(chr, "")
-            presidentsFileName[i] = presidentsFileName[i].replace(".txt", "").replace("Nomination_", "")
+        presidentsFileName[i] = presidentsFileName[i].replace(".txt", "").replace("Nomination_", "")
     return presidentsFileName
 
 def addPresidentSurname(listOfPresidents : list):
