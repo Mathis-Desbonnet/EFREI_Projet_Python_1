@@ -67,7 +67,7 @@ def TFIDFList(folderAdrr : str="./cleaned/"):
                 TFIDF[i].append(None)
         i += 1
     
-    return TFIDF, list(IDF.keys())
+    return TFIDF
 
 def printTab2D(listOfTFIDF : list):
     for i in range(len(listOfTFIDF)):
@@ -82,5 +82,5 @@ def printTab2D(listOfTFIDF : list):
     
 
 
-#print(TFCalculator(open("./cleaned/Nomination_Chirac1.txt", "r").read()))
-# IDFCalculator()
+print(TFCalculator(open("./cleaned/Nomination_Chirac1.txt", "r").read()))
+IDFCalculator()
