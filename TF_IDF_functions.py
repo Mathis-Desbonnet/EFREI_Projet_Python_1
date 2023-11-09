@@ -84,3 +84,4 @@ def printTab2D(listOfTFIDF : list):
 
 print(TFCalculator(open("./cleaned/Nomination_Chirac1.txt", "r").read()))
 IDFCalculator()
+printTab2D(TFIDFList())
