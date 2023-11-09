@@ -57,6 +57,6 @@ def deletePonctuationSign(cleanSpeechFolder : str="./cleaned/"):
         fileOut.close()
     return "done"
 
-printPresidentNames(addPresidentSurname(getPresidentNames()))
-print(cleanPresidentText())
-print(deletePonctuationSign())
+# printPresidentNames(addPresidentSurname(getPresidentNames()))
+# print(cleanPresidentText())
+# print(deletePonctuationSign())
