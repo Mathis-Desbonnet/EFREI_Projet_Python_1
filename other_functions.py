@@ -19,27 +19,30 @@ def IrreleventWords(matrice : list, WordsList : list) :
     text = text[:-1]
     return text
 
-# print(IrreleventWords(TFIDFList()[0], TFIDFList()[1]))
+#print(IrreleventWords(TFIDFList()[0], TFIDFList()[1]))
 
 def ImportantWords(matrice : list, WordsList : list) :
     '''
     Return the list of the importants words (high TD-IDF)
     '''
-    text = ""
+    maxTFIDF = 0
+    WordsAndTFIDFScore = {}
+    betterWords = []
     for i in range(len(matrice)) :
-        counter = 0
+        maxTFIDFperWords = 0
         for j in range(len(matrice[i])) :
-            if matrice[i][j] != None :
-                counter += matrice[i][j]
-        WordsList[i] = [WordsList[i], counter]
-    WordsList.sort(key = lambda x : x[1], reverse = True)
-    for indice in range(10) :
-        text += (WordsList[indice][0] + "\n")
-    text = text[:-1]
-    return text
+            if matrice[i][j] != None and matrice[i][j] > maxTFIDFperWords :
+                maxTFIDFperWords += matrice[i][j]
+        WordsAndTFIDFScore[WordsList[i]] = maxTFIDFperWords
+        if maxTFIDF < maxTFIDFperWords :
+            maxTFIDF = maxTFIDFperWords
+    for key in WordsAndTFIDFScore.keys() :
+        if WordsAndTFIDFScore[key] == maxTFIDF :
+            betterWords.append(key)
+    return betterWords
 
-# print(ImportantWords(TFIDFList()[0], TFIDFList()[1]))
-
+print(ImportantWords(TFIDFList()[0], TFIDFList()[1]))
+print(TFIDFList()[0])
 
 def ListOfWords(president : str, folderAdrr : str="./cleaned/") :
     '''
@@ -123,8 +126,8 @@ def UniversalWords() :
     for i in range(len(List)) :
         val = True
         counter = 0
-        if Words[i] in Irrelevents :
-            val = False
+        # if Words[i] in Irrelevents :
+        #     val = False
         while counter < len(List[i]) and val :
             if List[i][counter] == None :
                 val = False
@@ -133,4 +136,4 @@ def UniversalWords() :
     text =  text[:-1]
     return text
 
-# print(UniversalWords())
+print(UniversalWords())
