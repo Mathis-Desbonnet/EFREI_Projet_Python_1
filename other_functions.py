@@ -21,8 +21,8 @@ def irrelevantWords(matrice: list, wordsList: list):
     return irrelevants
 
 
-print(irrelevantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
-print()
+# print(irrelevantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
+# print()
 
 
 def importantWords(matrice: list, wordsList: list):
@@ -47,8 +47,8 @@ def importantWords(matrice: list, wordsList: list):
     return betterWords
 
 
-print(TFIDFList("./test/")[0], TFIDFList("./test/")[1])
-print(importantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
+# print(TFIDFList("./test/")[0], TFIDFList("./test/")[1])
+# print(importantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
 
 
 def listOfWords(president: str, folderAddr: str = "./cleaned/"):
@@ -138,28 +138,30 @@ def firstToSay(words: list):
 # print(firstToSay(["climat"]))
 
 
-def universalWords(matrice: list, wordsList: list):
+def universalWords(wordsList: list, folderAddr: str = "./cleaned/"):
     """
     Return a string wich contains the words used by all the presidents (except the irrelevants words)
     """
-    irrelevants = irrelevantWords(matrice, wordsList)
-    text = ""
-    for i in range(len(matrice)):
-        val = True
-        counter = 0
-        if wordsList[i] in irrelevants:
-            val = False
-        while counter < len(matrice[i]) and val:
-            if matrice[i][counter] == None:
-                val = False
-            counter += 1
-        text += (wordsList[i] + "\n") * val
-    if text == "":
-        return "No words has been used by all the presidents apart from the irrelevants words"
-    else:
-        text = text[:-1]
-        return text
+    universals = ""
+    namesList = getPresidentNames()
+    irelevants = irrelevantWords(TFIDFList()[0], TFIDFList()[1])
+    presidentWordsList = []
+    for president in namesList:
+        presidentWordsList.append(listOfWords(president).keys())
+    for word in wordsList:
+        if not word in irelevants:
+            val = True
+            counter = 0
+            while val and counter < len(presidentWordsList) :
+                president = presidentWordsList[counter]
+                if not word in president :
+                    val = False
+                counter += 1
+            universals += (word + "\n")*val
+    if universals == "" :
+        return "No important word has been used by all the presidents."
+    else : return universals
 
 
-print()
-print(universalWords(TFIDFList()[0], TFIDFList()[1]))
+# print()
+# print(universalWords(TFIDFList()[1]))
