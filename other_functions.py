@@ -2,140 +2,164 @@ from TF_IDF_functions import TFCalculator, TFIDFList
 import os
 from fonctions import getPresidentNames
 
-def irrelevantWords(matrice : list, wordsList : list) :
-    '''
+
+def irrelevantWords(matrice: list, wordsList: list):
+    """
     Return a string wich contains the irrelevants words (TD-IDF = 0)
-    '''
+    """
     irrelevants = ""
-    for i in range(len(matrice)) :
+    for i in range(len(matrice)):
         word = matrice[i]
         isImportant = True
         nbr = 0
-        while (nbr < len(word)) and isImportant :
-            if word[nbr] != 0 :
+        while (nbr < len(word)) and isImportant:
+            if word[nbr] != 0:
                 isImportant = False
             nbr += 1
-        irrelevants += (wordsList[i] + "\n")*isImportant
+        irrelevants += (wordsList[i] + "\n") * isImportant
     irrelevants = irrelevants[:-1]
     return irrelevants
 
-#print(irrelevantWords(TFIDFList()[0], TFIDFList()[1]))
 
-def importantWords(matrice : list, wordsList : list) :
-    '''
+print(irrelevantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
+print()
+
+
+def importantWords(matrice: list, wordsList: list):
+    """
     Return a string wich contains the importants words (high TD-IDF)
-    '''
+    """
     maxTFIDF = 0
     wordsAndTFIDFScore = {}
     betterWords = ""
-    for i in range(len(matrice)) :
+    for i in range(len(matrice)):
         maxTFIDFperWords = 0
-        for j in range(len(matrice[i])) :
-            if matrice[i][j] != None and matrice[i][j] > maxTFIDFperWords :
+        for j in range(len(matrice[i])):
+            if matrice[i][j] != None and matrice[i][j] > maxTFIDFperWords:
                 maxTFIDFperWords += matrice[i][j]
         wordsAndTFIDFScore[wordsList[i]] = maxTFIDFperWords
-        if maxTFIDF < maxTFIDFperWords :
+        if maxTFIDF < maxTFIDFperWords:
             maxTFIDF = maxTFIDFperWords
-    for key in wordsAndTFIDFScore.keys() :
-        if wordsAndTFIDFScore[key] == maxTFIDF :
+    for key in wordsAndTFIDFScore.keys():
+        if wordsAndTFIDFScore[key] == maxTFIDF:
             betterWords += key + "\n"
     betterWords = betterWords[:-1]
     return betterWords
 
-#print(importantWords(TFIDFList()[0], TFIDFList()[1]))
 
-def listOfWords(president : str, folderAddr : str="./cleaned/") :
-    '''
+print(TFIDFList("./test/")[0], TFIDFList("./test/")[1])
+print(importantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
+
+
+def listOfWords(president: str, folderAddr: str = "./cleaned/"):
+    """
     Return a dictionnary with the words used by the chosen president (except the irrelevants words)
-    '''
+    """
     relevantUsedWords = {}
     irrelevants = irrelevantWords(TFIDFList()[0], TFIDFList()[1])
     for fileName in os.listdir(folderAddr):
-        if president in fileName :
+        if president in fileName:
             allUsedWords = TFCalculator(open(folderAddr + fileName, "r").read())
-            for keys in allUsedWords.keys() :
-                if keys not in irrelevants :
-                    if keys in relevantUsedWords.keys() :
+            for keys in allUsedWords.keys():
+                if keys not in irrelevants:
+                    if keys in relevantUsedWords.keys():
                         relevantUsedWords[keys] += allUsedWords[keys]
-                    else :
+                    else:
                         relevantUsedWords[keys] = allUsedWords[keys]
-    relevantUsedWords = dict(sorted(relevantUsedWords.items(), key = lambda x : x[1], reverse = True))
+    relevantUsedWords = dict(
+        sorted(relevantUsedWords.items(), key=lambda x: x[1], reverse=True)
+    )
     return relevantUsedWords
 
-#print(listOfWords("Macron"))
 
-def mostUsedWords(president : str, folderAddr : str="./cleaned/") :
-    '''
+# print(listOfWords("Macron"))
+
+
+def mostUsedWords(president: str, folderAddr: str = "./cleaned/"):
+    """
     Return a string wich contains the most used words by the chosen president
-    '''
+    """
     presidentWordsList = listOfWords(president, folderAddr)
     mostUsedWords = ""
-    for keys in list(presidentWordsList.keys())[:10] :
+    for keys in list(presidentWordsList.keys())[:10]:
         mostUsedWords += keys + "\n"
     mostUsedWords = mostUsedWords[:-1]
     return mostUsedWords
 
 
- #print(mostUsedWords("Macron"))
+# print(mostUsedWords("Macron"))
 
 
-def whoTalkAbout(word : str, folderAddr : str="./cleaned/") :
-    '''
+def whoTalkAbout(word: str, folderAddr: str = "./cleaned/"):
+    """
     Return the names of the presidents who has talked about a chosen word and the name of the president who has talked the most about it
-    '''
+    """
     namesList = getPresidentNames()
     presidentsList = []
-    for name in namesList :
-        if not name in presidentsList :
+    for name in namesList:
+        if not name in presidentsList:
             presidentsList.append(name)
     hasTalkAbout = ""
     maxi = ["", 0]
-    for president in presidentsList :
+    for president in presidentsList:
         presidentWordsList = listOfWords(president)
-        if word in presidentWordsList.keys() :
+        if word in presidentWordsList.keys():
             hasTalkAbout += president + "\n"
-            if maxi[1] < presidentWordsList[word] :
+            if maxi[1] < presidentWordsList[word]:
                 maxi = [president, presidentWordsList[word]]
     hasTalkAbout += "\n" + "The president who has talked the most about is : " + maxi[0]
     return hasTalkAbout
-        
-#print(whoTalkAbout("nation"))
 
 
-def firstToSay(words : list) :
-    '''
+# print(whoTalkAbout("nation"))
+
+
+def firstToSay(words: list):
+    """
     Return the name of the president who has talked about the words the first
-    '''
-    chronology = ["De Gaulle", "Pompidou", "Giscard", "Mitterrand", "Chirac", "Sarkozy", "Hollande", "Macron"]
-    for president in chronology :
+    """
+    chronology = [
+        "De Gaulle",
+        "Pompidou",
+        "Giscard",
+        "Mitterrand",
+        "Chirac",
+        "Sarkozy",
+        "Hollande",
+        "Macron",
+    ]
+    for president in chronology:
         presidentWordsList = listOfWords(president)
-        for word in words :
-            if word in presidentWordsList.keys() :
+        for word in words:
+            if word in presidentWordsList.keys():
                 return president
-            
-#print(firstToSay(["climat"]))
 
 
-def universalWords(matrice : list, wordsList : list) :
-    '''
+# print(firstToSay(["climat"]))
+
+
+def universalWords(matrice: list, wordsList: list):
+    """
     Return a string wich contains the words used by all the presidents (except the irrelevants words)
-    '''
+    """
     irrelevants = irrelevantWords(matrice, wordsList)
     text = ""
-    for i in range(len(matrice)) :
+    for i in range(len(matrice)):
         val = True
         counter = 0
-        if wordsList[i] in irrelevants :
+        if wordsList[i] in irrelevants:
             val = False
-        while counter < len(matrice[i]) and val :
-            if matrice[i][counter] == None :
+        while counter < len(matrice[i]) and val:
+            if matrice[i][counter] == None:
                 val = False
             counter += 1
-        text += (wordsList[i] + "\n")*val
-    if text == "" :
+        text += (wordsList[i] + "\n") * val
+    if text == "":
         return "No words has been used by all the presidents apart from the irrelevants words"
-    else :
-        text =  text[:-1]
+    else:
+        text = text[:-1]
         return text
 
-#print(universalWords(TFIDFList()[0], TFIDFList()[1]))
+
+print()
+print(universalWords(TFIDFList()[0], TFIDFList()[1]))
