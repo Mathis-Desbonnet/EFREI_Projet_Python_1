@@ -59,7 +59,7 @@ def TFIDFList(folderAdrr : str="./cleaned/"):
         TFTab.append(TFCalculator(open(folderAdrr + fileName, "r").read()))
     i = 0
     for key in IDF.keys():
-        TFIDF.append([])
+        TFIDF.append([key])
         for numberOfFiles in range(len(os.listdir(folderAdrr))):
             if key in TFTab[numberOfFiles].keys():
                 TFIDF[i].append(IDF[key]*TFTab[numberOfFiles][key])
@@ -78,10 +78,12 @@ def printTab2D(listOfTFIDF : list):
                 print(j, end=" ")
             elif j == None:
                 print(j, end="               ")
+            else:
+                print(j, end=" ")
         print()
     
 
 
 print(TFCalculator(open("./cleaned/Nomination_Chirac1.txt", "r").read()))
-IDFCalculator()
+print(IDFCalculator())
 printTab2D(TFIDFList())
