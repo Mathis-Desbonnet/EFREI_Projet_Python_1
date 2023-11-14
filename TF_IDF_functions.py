@@ -1,7 +1,8 @@
 import os
 import math
 
-def occurrenceOfWords(text : str, word : str):
+
+def occurrenceOfWords(text: str, word: str):
     """
     Returns the number of occurrences of a word in a text.
     """
@@ -12,7 +13,8 @@ def occurrenceOfWords(text : str, word : str):
             counter += 1
     return counter
 
-def TFCalculator(text : str):
+
+def TFCalculator(text: str):
     """
     Returns the term frequency of each word in a text.
     """
@@ -23,11 +25,12 @@ def TFCalculator(text : str):
         TF[word] = occurrenceOfWords(text, word)
     return TF
 
-def IDFCalculator(folderAdrr : str="./cleaned/"):
-    filesName = os.listdir(folderAdrr)
+
+def IDFCalculator(folderAddr: str = "./cleaned/"):
+    filesName = os.listdir(folderAddr)
     allWords = []
     for name in filesName:
-        speechFile = open(folderAdrr + name)
+        speechFile = open(folderAddr + name)
         text = speechFile.read()
         words = list(set(text.split()))
         allWords.append(words)
@@ -45,31 +48,31 @@ def IDFCalculator(folderAdrr : str="./cleaned/"):
             allWords.pop(0)
 
     for key in IDF.keys():
-        IDF[key] = round(math.log10((len(filesName)/IDF[key])), 16)
+        IDF[key] = round(math.log10((len(filesName) / IDF[key])), 16)
 
     return IDF
 
 
-
-def TFIDFList(folderAdrr : str="./cleaned/"):
+def TFIDFList(folderAddr: str = "./cleaned/"):
     TFIDF = []
     TFTab = []
-    IDF = IDFCalculator(folderAdrr)
-    for fileName in os.listdir(folderAdrr):
-        TFTab.append(TFCalculator(open(folderAdrr + fileName, "r").read()))
+    IDF = IDFCalculator(folderAddr)
+    for fileName in os.listdir(folderAddr):
+        TFTab.append(TFCalculator(open(folderAddr + fileName, "r").read()))
     i = 0
     for key in IDF.keys():
         TFIDF.append([key])
-        for numberOfFiles in range(len(os.listdir(folderAdrr))):
+        for numberOfFiles in range(len(os.listdir(folderAddr))):
             if key in TFTab[numberOfFiles].keys():
-                TFIDF[i].append(IDF[key]*TFTab[numberOfFiles][key])
+                TFIDF[i].append(IDF[key] * TFTab[numberOfFiles][key])
             else:
                 TFIDF[i].append(None)
         i += 1
-    
+
     return TFIDF
 
-def printTab2D(listOfTFIDF : list):
+
+def printTab2D(listOfTFIDF: list):
     for i in range(len(listOfTFIDF)):
         for j in listOfTFIDF[i]:
             if j == 0.0:
@@ -81,7 +84,6 @@ def printTab2D(listOfTFIDF : list):
             else:
                 print(j, end=" ")
         print()
-    
 
 
 print(TFCalculator(open("./cleaned/Nomination_Chirac1.txt", "r").read()))
