@@ -61,7 +61,7 @@ def TFIDFList(folderAddr: str = "./cleaned/"):
         TFTab.append(TFCalculator(open(folderAddr + fileName, "r").read()))
     i = 0
     for key in IDF.keys():
-        TFIDF.append([key])
+        TFIDF.append([])
         for numberOfFiles in range(len(os.listdir(folderAddr))):
             if key in TFTab[numberOfFiles].keys():
                 TFIDF[i].append(IDF[key] * TFTab[numberOfFiles][key])
