@@ -44,15 +44,15 @@ def importantWords(matrice : list, wordsList : list) :
 
 #print(importantWords(TFIDFList()[0], TFIDFList()[1]))
 
-def listOfWords(president : str, folderAdrr : str="./cleaned/") :
+def listOfWords(president : str, folderAddr : str="./cleaned/") :
     '''
     Return a dictionnary with the words used by the chosen president (except the irrelevants words)
     '''
     relevantUsedWords = {}
     irrelevants = irrelevantWords(TFIDFList()[0], TFIDFList()[1])
-    for fileName in os.listdir(folderAdrr):
+    for fileName in os.listdir(folderAddr):
         if president in fileName :
-            allUsedWords = TFCalculator(open(folderAdrr + fileName, "r").read())
+            allUsedWords = TFCalculator(open(folderAddr + fileName, "r").read())
             for keys in allUsedWords.keys() :
                 if keys not in irrelevants :
                     if keys in relevantUsedWords.keys() :
@@ -64,11 +64,11 @@ def listOfWords(president : str, folderAdrr : str="./cleaned/") :
 
 #print(listOfWords("Macron"))
 
-def mostUsedWords(president : str, folderAdrr : str="./cleaned/") :
+def mostUsedWords(president : str, folderAddr : str="./cleaned/") :
     '''
     Return a string wich contains the most used words by the chosen president
     '''
-    presidentWordsList = listOfWords(president, folderAdrr)
+    presidentWordsList = listOfWords(president, folderAddr)
     mostUsedWords = ""
     for keys in list(presidentWordsList.keys())[:10] :
         mostUsedWords += keys + "\n"
@@ -79,7 +79,7 @@ def mostUsedWords(president : str, folderAdrr : str="./cleaned/") :
  #print(mostUsedWords("Macron"))
 
 
-def whoTalkAbout(word : str, folderAdrr : str="./cleaned/") :
+def whoTalkAbout(word : str, folderAddr : str="./cleaned/") :
     '''
     Return the names of the presidents who has talked about a chosen word and the name of the president who has talked the most about it
     '''

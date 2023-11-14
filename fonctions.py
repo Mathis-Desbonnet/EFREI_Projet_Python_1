@@ -1,8 +1,8 @@
 import os
 
-def getPresidentNames(folderAdrr : str="./speeches/"):
+def getPresidentNames(folderAddr : str="./speeches/"):
     """Returns a list of presidents names"""
-    presidentsFileName = os.listdir(folderAdrr)
+    presidentsFileName = os.listdir(folderAddr)
     for i in range(len(presidentsFileName)):
         for chr in presidentsFileName[i]:
             if chr.isdigit():

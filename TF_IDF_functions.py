@@ -23,11 +23,11 @@ def TFCalculator(text : str):
         TF[word] = occurrenceOfWords(text, word)
     return TF
 
-def IDFCalculator(folderAdrr : str="./cleaned/"):
-    filesName = os.listdir(folderAdrr)
+def IDFCalculator(folderAddr : str="./cleaned/"):
+    filesName = os.listdir(folderAddr)
     allWords = []
     for name in filesName:
-        speechFile = open(folderAdrr + name)
+        speechFile = open(folderAddr + name)
         text = speechFile.read()
         words = list(set(text.split()))
         allWords.append(words)
@@ -51,16 +51,16 @@ def IDFCalculator(folderAdrr : str="./cleaned/"):
 
 
 
-def TFIDFList(folderAdrr : str="./cleaned/"):
+def TFIDFList(folderAddr : str="./cleaned/"):
     TFIDF = []
     TFTab = []
-    IDF = IDFCalculator(folderAdrr)
-    for fileName in os.listdir(folderAdrr):
-        TFTab.append(TFCalculator(open(folderAdrr + fileName, "r").read()))
+    IDF = IDFCalculator(folderAddr)
+    for fileName in os.listdir(folderAddr):
+        TFTab.append(TFCalculator(open(folderAddr + fileName, "r").read()))
     i = 0
     for key in IDF.keys():
         TFIDF.append([])
-        for numberOfFiles in range(len(os.listdir(folderAdrr))):
+        for numberOfFiles in range(len(os.listdir(folderAddr))):
             if key in TFTab[numberOfFiles].keys():
                 TFIDF[i].append(IDF[key]*TFTab[numberOfFiles][key])
             else:
