@@ -51,28 +51,23 @@ def importantWords(matrice: list, wordsList: list):
 # print(importantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
 
 
-def listOfWords(president: str, folderAddr: str = "./cleaned/"):
-    """
+def listOfWords(president : str, folderAddr : str="./cleaned/") :
+    '''
     Return a dictionnary with the words used by the chosen president (except the irrelevants words)
-    """
-    relevantUsedWords = {}
+    '''
+    relevantUsedWords = []
     irrelevants = irrelevantWords(TFIDFList()[0], TFIDFList()[1])
     for fileName in os.listdir(folderAddr):
-        if president in fileName:
-            allUsedWords = TFCalculator(open(folderAddr + fileName, "r").read())
-            for keys in allUsedWords.keys():
-                if keys not in irrelevants:
-                    if keys in relevantUsedWords.keys():
-                        relevantUsedWords[keys] += allUsedWords[keys]
-                    else:
-                        relevantUsedWords[keys] = allUsedWords[keys]
-    relevantUsedWords = dict(
-        sorted(relevantUsedWords.items(), key=lambda x: x[1], reverse=True)
-    )
+        if president in fileName :
+            text = open(folderAddr + fileName, "r").read()
+            allUsedWords = list(set(text.split()))
+            for keys in allUsedWords :
+                if keys not in irrelevants :
+                        relevantUsedWords.append(keys)
     return relevantUsedWords
 
+#print(listOfWords("Macron"))
 
-# print(listOfWords("Macron"))
 
 
 def mostUsedWords(president: str, folderAddr: str = "./cleaned/"):
@@ -81,7 +76,7 @@ def mostUsedWords(president: str, folderAddr: str = "./cleaned/"):
     """
     presidentWordsList = listOfWords(president, folderAddr)
     mostUsedWords = ""
-    for keys in list(presidentWordsList.keys())[:10]:
+    for keys in list(presidentWordsList)[:10]:
         mostUsedWords += keys + "\n"
     mostUsedWords = mostUsedWords[:-1]
     return mostUsedWords
@@ -103,7 +98,7 @@ def whoTalkAbout(word: str, folderAddr: str = "./cleaned/"):
     maxi = ["", 0]
     for president in presidentsList:
         presidentWordsList = listOfWords(president)
-        if word in presidentWordsList.keys():
+        if word in presidentWordsList:
             hasTalkAbout += president + "\n"
             if maxi[1] < presidentWordsList[word]:
                 maxi = [president, presidentWordsList[word]]
@@ -131,7 +126,7 @@ def firstToSay(words: list):
     for president in chronology:
         presidentWordsList = listOfWords(president)
         for word in words:
-            if word in presidentWordsList.keys():
+            if word in presidentWordsList:
                 return president
 
 
@@ -147,7 +142,7 @@ def universalWords(wordsList: list, folderAddr: str = "./cleaned/"):
     irelevants = irrelevantWords(TFIDFList()[0], TFIDFList()[1])
     presidentWordsList = []
     for president in namesList:
-        presidentWordsList.append(listOfWords(president).keys())
+        presidentWordsList.append(listOfWords(president))
     for word in wordsList:
         if not word in irelevants:
             val = True
@@ -163,5 +158,5 @@ def universalWords(wordsList: list, folderAddr: str = "./cleaned/"):
     else : return universals
 
 
-# print()
-# print(universalWords(TFIDFList()[1]))
+print()
+print(universalWords(TFIDFList()[1]))
