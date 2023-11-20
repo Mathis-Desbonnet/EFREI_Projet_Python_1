@@ -1,4 +1,4 @@
-from TF_IDF_functions import TFCalculator, TFIDFList
+from TF_IDF_functions import TFIDFList, occurrenceOfWords
 import os
 from fonctions import getPresidentNames
 
@@ -91,17 +91,22 @@ def whoTalkAbout(word: str, folderAddr: str = "./cleaned/"):
     """
     namesList = getPresidentNames()
     presidentsList = []
+    irrevelant = irrelevantWords(TFIDFList(folderAddr)[0], TFIDFList(folderAddr)[1])
     for name in namesList:
         if not name in presidentsList:
             presidentsList.append(name)
     hasTalkAbout = ""
     maxi = ["", 0]
     for president in presidentsList:
-        presidentWordsList = listOfWords(president)
+        presidentWordsList = listOfWords(president, irrevelant, folderAddr)
         if word in presidentWordsList:
             hasTalkAbout += president + "\n"
-            if maxi[1] < presidentWordsList[word]:
-                maxi = [president, presidentWordsList[word]]
+            occurences = 0
+            for fileName in os.listdir(folderAddr):
+                if president in fileName :
+                    occurences += occurrenceOfWords(open(folderAddr + fileName, "r").read(), word)
+            if maxi[1] < occurences:
+                maxi = [president, occurences]
     hasTalkAbout += "\n" + "The president who has talked the most about is : " + maxi[0]
     return hasTalkAbout
 
@@ -157,6 +162,6 @@ def universalWords(wordsList: list, irrelevants : list, folderAddr: str = "./cle
         return "No important word has been used by all the presidents."
     else : return universals
 
-irrelevants = irrelevantWords(TFIDFList()[0], TFIDFList()[1])
-print()
-print(universalWords(TFIDFList()[1] , irrelevants))
+# irrelevants = irrelevantWords(TFIDFList()[0], TFIDFList()[1])
+# print()
+# print(universalWords(TFIDFList()[1] , irrelevants))
