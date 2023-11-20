@@ -51,12 +51,12 @@ def importantWords(matrice: list, wordsList: list):
 # print(importantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
 
 
-def listOfWords(president : str, folderAddr : str="./cleaned/") :
+def listOfWords(president : str, irrevelantsWordsList : list=None, folderAddr : str="./cleaned/") :
     '''
     Return a dictionnary with the words used by the chosen president (except the irrelevants words)
     '''
     relevantUsedWords = []
-    irrelevants = irrelevantWords(TFIDFList()[0], TFIDFList()[1])
+    irrelevants = irrevelantsWordsList
     for fileName in os.listdir(folderAddr):
         if president in fileName :
             text = open(folderAddr + fileName, "r").read()
@@ -82,7 +82,7 @@ def mostUsedWords(president: str, folderAddr: str = "./cleaned/"):
     return mostUsedWords
 
 
-# print(mostUsedWords("Macron"))
+#print(mostUsedWords("Macron"))
 
 
 def whoTalkAbout(word: str, folderAddr: str = "./cleaned/"):
@@ -133,18 +133,18 @@ def firstToSay(words: list):
 # print(firstToSay(["climat"]))
 
 
-def universalWords(wordsList: list, folderAddr: str = "./cleaned/"):
+def universalWords(wordsList: list, irrelevants : list, folderAddr: str = "./cleaned/"):
     """
     Return a string wich contains the words used by all the presidents (except the irrelevants words)
     """
     universals = ""
     namesList = getPresidentNames()
-    irelevants = irrelevantWords(TFIDFList()[0], TFIDFList()[1])
     presidentWordsList = []
+    print("Please wait, it can take a few seconds...")
     for president in namesList:
-        presidentWordsList.append(listOfWords(president))
+        presidentWordsList.append(listOfWords(president, irrelevants, folderAddr))
     for word in wordsList:
-        if not word in irelevants:
+        if not word in irrelevants:
             val = True
             counter = 0
             while val and counter < len(presidentWordsList) :
@@ -157,6 +157,6 @@ def universalWords(wordsList: list, folderAddr: str = "./cleaned/"):
         return "No important word has been used by all the presidents."
     else : return universals
 
-
+irrelevants = irrelevantWords(TFIDFList()[0], TFIDFList()[1])
 print()
-print(universalWords(TFIDFList()[1]))
+print(universalWords(TFIDFList()[1] , irrelevants))
