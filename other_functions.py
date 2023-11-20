@@ -51,12 +51,11 @@ def importantWords(matrice: list, wordsList: list):
 # print(importantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
 
 
-def listOfWords(president : str, irrevelantsWordsList : list=None, folderAddr : str="./cleaned/") :
+def listOfWords(president : str, irrelevants : list, folderAddr : str) :
     '''
     Return a dictionnary with the words used by the chosen president (except the irrelevants words)
     '''
     relevantUsedWords = []
-    irrelevants = irrevelantsWordsList
     for fileName in os.listdir(folderAddr):
         if president in fileName :
             text = open(folderAddr + fileName, "r").read()
@@ -70,11 +69,11 @@ def listOfWords(president : str, irrevelantsWordsList : list=None, folderAddr : 
 
 
 
-def mostUsedWords(president: str, folderAddr: str = "./cleaned/"):
+def mostUsedWords(president: str, irrelevants : list, folderAddr: str = "./cleaned/"):
     """
     Return a string wich contains the most used words by the chosen president
     """
-    presidentWordsList = listOfWords(president, folderAddr)
+    presidentWordsList = listOfWords(president, irrelevants, folderAddr)
     mostUsedWords = ""
     for keys in list(presidentWordsList)[:10]:
         mostUsedWords += keys + "\n"
@@ -85,20 +84,19 @@ def mostUsedWords(president: str, folderAddr: str = "./cleaned/"):
 #print(mostUsedWords("Macron"))
 
 
-def whoTalkAbout(word: str, folderAddr: str = "./cleaned/"):
+def whoTalkAbout(word: str, irrelevants : list, folderAddr: str = "./cleaned/"):
     """
-    Return the names of the presidents who has talked about a chosen word and the name of the president who has talked the most about it
+    Return the names of the presidents who talked about a chosen word and the name of the president who has talked the most about it
     """
     namesList = getPresidentNames()
     presidentsList = []
-    irrevelant = irrelevantWords(TFIDFList(folderAddr)[0], TFIDFList(folderAddr)[1])
     for name in namesList:
         if not name in presidentsList:
             presidentsList.append(name)
     hasTalkAbout = ""
     maxi = ["", 0]
     for president in presidentsList:
-        presidentWordsList = listOfWords(president, irrevelant, folderAddr)
+        presidentWordsList = listOfWords(president, irrelevants, folderAddr)
         if word in presidentWordsList:
             hasTalkAbout += president + "\n"
             occurences = 0
@@ -107,16 +105,18 @@ def whoTalkAbout(word: str, folderAddr: str = "./cleaned/"):
                     occurences += occurrenceOfWords(open(folderAddr + fileName, "r").read(), word)
             if maxi[1] < occurences:
                 maxi = [president, occurences]
-    hasTalkAbout += "\n" + "The president who has talked the most about is : " + maxi[0]
+    if hasTalkAbout == "":
+        hasTalkAbout = "Nobody talked about this word..."
+    else : hasTalkAbout += "\n" + "The president who talked the most about is : " + maxi[0]
     return hasTalkAbout
 
 
 #print(whoTalkAbout("nation"))
 
 
-def firstToSay(words: list):
+def firstToSay(words: list, irrelevants : list, folderAddr : str):
     """
-    Return the name of the president who has talked about the words the first
+    Return the name of the president who talked about the words the first
     """
     chronology = [
         "De Gaulle",
@@ -129,10 +129,11 @@ def firstToSay(words: list):
         "Macron",
     ]
     for president in chronology:
-        presidentWordsList = listOfWords(president)
+        presidentWordsList = listOfWords(president, irrelevants, folderAddr)
         for word in words:
             if word in presidentWordsList:
                 return president
+    return "Nobody talked about this word or maybe it's an irrelevant one..."
 
 
 # print(firstToSay(["climat"]))
