@@ -1,7 +1,8 @@
 import os
 import math
 
-def occurrenceOfWords(text : str, word : str):
+
+def occurrenceOfWords(text: str, word: str):
     """
     Returns the number of occurrences of a word in a text.
     """
@@ -12,7 +13,8 @@ def occurrenceOfWords(text : str, word : str):
             counter += 1
     return counter
 
-def TFCalculator(text : str):
+
+def TFCalculator(text: str):
     """
     Returns the term frequency of each word in a text.
     """
@@ -23,7 +25,7 @@ def TFCalculator(text : str):
         TF[word] = occurrenceOfWords(text, word)
     return TF
 
-def IDFCalculator(folderAddr : str="./cleaned/"):
+def IDFCalculator(folderAddr: str = "./cleaned/"):
     filesName = os.listdir(folderAddr)
     allWords = []
     for name in filesName:
@@ -45,10 +47,9 @@ def IDFCalculator(folderAddr : str="./cleaned/"):
             allWords.pop(0)
 
     for key in IDF.keys():
-        IDF[key] = round(math.log10((len(filesName)/IDF[key])), 16)
+        IDF[key] = round(math.log10((len(filesName) / IDF[key])), 16)
 
     return IDF
-
 
 
 def TFIDFList(folderAddr : str="./cleaned/"):
@@ -62,14 +63,15 @@ def TFIDFList(folderAddr : str="./cleaned/"):
         TFIDF.append([])
         for numberOfFiles in range(len(os.listdir(folderAddr))):
             if key in TFTab[numberOfFiles].keys():
-                TFIDF[i].append(IDF[key]*TFTab[numberOfFiles][key])
+                TFIDF[i].append(IDF[key] * TFTab[numberOfFiles][key])
             else:
                 TFIDF[i].append(None)
         i += 1
-    
+
     return TFIDF, list(IDF.keys())
 
-def printTab2D(listOfTFIDF : list):
+
+def printTab2D(listOfTFIDF: list):
     for i in range(len(listOfTFIDF)):
         for j in listOfTFIDF[i]:
             if j == 0.0:
@@ -79,8 +81,7 @@ def printTab2D(listOfTFIDF : list):
             elif j == None:
                 print(j, end="               ")
         print()
-    
 
 
-#print(TFCalculator(open("./cleaned/Nomination_Chirac1.txt", "r").read()))
+# print(TFCalculator(open("./cleaned/Nomination_Chirac1.txt", "r").read()))
 # IDFCalculator()
