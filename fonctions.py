@@ -1,13 +1,13 @@
 import os
 
-def getPresidentNames(folderAdrr : str="./speeches/"):
+def getPresidentNames(folderAddr : str="./speeches/"):
     """Returns a list of presidents names"""
-    presidentsFileName = os.listdir(folderAdrr)
+    presidentsFileName = os.listdir(folderAddr)
     for i in range(len(presidentsFileName)):
         for chr in presidentsFileName[i]:
             if chr.isdigit():
                 presidentsFileName[i] = presidentsFileName[i].replace(chr, "")
-            presidentsFileName[i] = presidentsFileName[i].replace(".txt", "").replace("Nomination_", "")
+        presidentsFileName[i] = presidentsFileName[i].replace(".txt", "").replace("Nomination_", "")
     return presidentsFileName
 
 def addPresidentSurname(listOfPresidents : list):
@@ -57,6 +57,6 @@ def deletePonctuationSign(cleanSpeechFolder : str="./cleaned/"):
         fileOut.close()
     return "done"
 
-printPresidentNames(addPresidentSurname(getPresidentNames()))
-print(cleanPresidentText())
-print(deletePonctuationSign())
+# printPresidentNames(addPresidentSurname(getPresidentNames()))
+# print(cleanPresidentText())
+# print(deletePonctuationSign())
