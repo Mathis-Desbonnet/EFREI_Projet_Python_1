@@ -2,21 +2,11 @@ import os
 import math
 
 
-def occurrenceOfWords(text: str, word: str) -> int:
+def occurrenceOfWords(text: str, word: str):
     """
-    The function `occurrenceOfWords` counts the number of times a specific word appears in a given text.
-
-    text: A string containing the text in which you want to count the occurrences of a specific
-    word.
-    type : string
-
-    word: The `word` parameter is a string that represents the word you want to count the
-    occurrences of in the `text` parameter.
-    type : string
-
-    return: the number of occurrences of a the `word` in the `text`.
+    Returns the number of occurrences of a word in a text.
     """
-    words = text.split()  # Split the string into a list of words
+    words = text.split()
     counter = 0
     for i in words:
         if i == word:
@@ -94,10 +84,5 @@ def printTab2D(listOfTFIDF: list):
         print()
 
 
-print(
-    occurrenceOfWords(open("./cleaned/Nomination_Sarkozy.txt", "r").read(), "Sarkozy")
-)
-print(TFCalculator(open("./cleaned/Nomination_Sarkozy.txt", "r").read()))
-print(IDFCalculator())
-print(os.listdir("./cleaned/"))
-print(TFIDFList())
+# print(TFCalculator(open("./cleaned/Nomination_Chirac1.txt", "r").read()))
+# IDFCalculator()
