@@ -1,4 +1,4 @@
-from TF_IDF_functions import TFCalculator, TFIDFList
+from TF_IDF_functions import TFIDFList, occurrenceOfWords
 import os
 from fonctions import getPresidentNames
 
@@ -21,8 +21,8 @@ def irrelevantWords(matrice: list, wordsList: list):
     return irrelevants
 
 
-print(irrelevantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
-print()
+# print(irrelevantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
+# print()
 
 
 def importantWords(matrice: list, wordsList: list):
@@ -47,52 +47,46 @@ def importantWords(matrice: list, wordsList: list):
     return betterWords
 
 
-print(TFIDFList("./test/")[0], TFIDFList("./test/")[1])
-print(importantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
+# print(TFIDFList("./test/")[0], TFIDFList("./test/")[1])
+# print(importantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
 
 
-def listOfWords(president: str, folderAddr: str = "./cleaned/"):
-    """
+def listOfWords(president : str, irrelevants : list, folderAddr : str) :
+    '''
     Return a dictionnary with the words used by the chosen president (except the irrelevants words)
-    """
-    relevantUsedWords = {}
-    irrelevants = irrelevantWords(TFIDFList()[0], TFIDFList()[1])
+    '''
+    relevantUsedWords = []
     for fileName in os.listdir(folderAddr):
-        if president in fileName:
-            allUsedWords = TFCalculator(open(folderAddr + fileName, "r").read())
-            for keys in allUsedWords.keys():
-                if keys not in irrelevants:
-                    if keys in relevantUsedWords.keys():
-                        relevantUsedWords[keys] += allUsedWords[keys]
-                    else:
-                        relevantUsedWords[keys] = allUsedWords[keys]
-    relevantUsedWords = dict(
-        sorted(relevantUsedWords.items(), key=lambda x: x[1], reverse=True)
-    )
+        if president in fileName :
+            text = open(folderAddr + fileName, "r").read()
+            allUsedWords = list(set(text.split()))
+            for keys in allUsedWords :
+                if keys not in irrelevants :
+                        relevantUsedWords.append(keys)
     return relevantUsedWords
 
+#print(listOfWords("Macron", irrelevantWords(TFIDFList("./cleaned/")[0], TFIDFList("./cleaned/")[1])))
 
-# print(listOfWords("Macron"))
 
 
-def mostUsedWords(president: str, folderAddr: str = "./cleaned/"):
+def mostUsedWords(president: str, irrelevants : list, folderAddr: str = "./cleaned/"):
     """
     Return a string wich contains the most used words by the chosen president
     """
-    presidentWordsList = listOfWords(president, folderAddr)
+    presidentWordsList = listOfWords(president, irrelevants, folderAddr)
     mostUsedWords = ""
-    for keys in list(presidentWordsList.keys())[:10]:
+    for keys in list(presidentWordsList)[:10]:
         mostUsedWords += keys + "\n"
     mostUsedWords = mostUsedWords[:-1]
     return mostUsedWords
 
 
-# print(mostUsedWords("Macron"))
+#print(mostUsedWords("Macron"))
 
 
-def whoTalkAbout(word: str, folderAddr: str = "./cleaned/"):
+def whoTalkAbout(word: str, irrelevants : list, folderAddr: str = "./cleaned/"):
     """
-    Return the names of the presidents who has talked about a chosen word and the name of the president who has talked the most about it
+    Return the names of the presidents who talked about a chosen word and the name of the president who has talked the most about it
     """
     namesList = getPresidentNames()
     presidentsList = []
@@ -102,21 +96,27 @@ def whoTalkAbout(word: str, folderAddr: str = "./cleaned/"):
     hasTalkAbout = ""
     maxi = ["", 0]
     for president in presidentsList:
-        presidentWordsList = listOfWords(president)
-        if word in presidentWordsList.keys():
+        presidentWordsList = listOfWords(president, irrelevants, folderAddr)
+        if word in presidentWordsList:
             hasTalkAbout += president + "\n"
-            if maxi[1] < presidentWordsList[word]:
-                maxi = [president, presidentWordsList[word]]
-    hasTalkAbout += "\n" + "The president who has talked the most about is : " + maxi[0]
+            occurences = 0
+            for fileName in os.listdir(folderAddr):
+                if president in fileName :
+                    occurences += occurrenceOfWords(open(folderAddr + fileName, "r").read(), word)
+            if maxi[1] < occurences:
+                maxi = [president, occurences]
+    if hasTalkAbout == "":
+        hasTalkAbout = "Nobody talked about this word..."
+    else : hasTalkAbout += "\n" + "The president who talked the most about is : " + maxi[0]
     return hasTalkAbout
 
 
-# print(whoTalkAbout("nation"))
+#print(whoTalkAbout("nation"))
 
 
-def firstToSay(words: list):
+def firstToSay(words: list, irrelevants : list, folderAddr : str):
     """
-    Return the name of the president who has talked about the words the first
+    Return the name of the president who talked about the words the first
     """
     chronology = [
         "De Gaulle",
@@ -129,37 +129,39 @@ def firstToSay(words: list):
         "Macron",
     ]
     for president in chronology:
-        presidentWordsList = listOfWords(president)
+        presidentWordsList = listOfWords(president, irrelevants, folderAddr)
         for word in words:
-            if word in presidentWordsList.keys():
+            if word in presidentWordsList:
                 return president
+    return "Nobody talked about this word or maybe it's an irrelevant one..."
 
 
 # print(firstToSay(["climat"]))
 
 
-def universalWords(matrice: list, wordsList: list):
+def universalWords(wordsList: list, irrelevants : list, folderAddr: str = "./cleaned/"):
     """
     Return a string wich contains the words used by all the presidents (except the irrelevants words)
     """
-    irrelevants = irrelevantWords(matrice, wordsList)
-    text = ""
-    for i in range(len(matrice)):
-        val = True
-        counter = 0
-        if wordsList[i] in irrelevants:
-            val = False
-        while counter < len(matrice[i]) and val:
-            if matrice[i][counter] == None:
-                val = False
-            counter += 1
-        text += (wordsList[i] + "\n") * val
-    if text == "":
-        return "No words has been used by all the presidents apart from the irrelevants words"
-    else:
-        text = text[:-1]
-        return text
+    universals = ""
+    namesList = getPresidentNames()
+    presidentWordsList = []
+    print("Please wait, it can take a few seconds...")
+    for president in namesList:
+        presidentWordsList.append(listOfWords(president, irrelevants, folderAddr))
+    for word in wordsList:
+        if not word in irrelevants:
+            val = True
+            counter = 0
+            while val and counter < len(presidentWordsList) :
+                president = presidentWordsList[counter]
+                if not word in president :
+                    val = False
+                counter += 1
+            universals += (word + "\n")*val
+    if universals == "" :
+        return "No important word has been used by all the presidents."
+    else : return universals
 
-
-print()
-print(universalWords(TFIDFList()[0], TFIDFList()[1]))
+# print()
+# print(universalWords(TFIDFList()[1] , irrelevants))
