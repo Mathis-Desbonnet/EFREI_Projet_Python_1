@@ -75,7 +75,7 @@ def cleanPresidentText(speechFolderIn: str = "./speeches/", speechFolderOut: str
     speechFolderIn (str): The path to the input folder containing the original text files. Defaults to "./speeches/".
     speechFolderOut (str): The path to the output folder where the cleaned text files will be written. Defaults to "./cleaned/".
     """
-    os.mkdir(speechFolderOut) # Create the output folder if it does not exist
+    os.mkdir(speechFolderOut, exist_ok=True) # Create the output folder if it does not exist
     fileName = os.listdir(speechFolderIn) # Get a list of all file names in the specified folder
     for file in fileName:
         if ".txt" in fileName: # Check if the file is a text file
