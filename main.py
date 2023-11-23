@@ -1,29 +1,29 @@
-import PySimpleGUI as sg
+import PySimpleGUI as sg # Import the library we used to create the GUI
 import os
 import TF_IDF_functions as tfidf
 import other_functions as of
 
 
-sg.theme('DarkBlue12')
-comboList = ['irrelevantWords', 'importantWords', 'mostUsedWords', 'whoTalkAbout', 'firstToSay', 'universalWords']
+sg.theme('DarkBlue12') # Set the theme of the GUI (color set)
+comboList = ['irrelevantWords', 'importantWords', 'mostUsedWords', 'whoTalkAbout', 'firstToSay', 'universalWords'] # The list of functions
 path = ""
 
 run = True
-while run :
-    layout1 = [  [sg.InputText(size=(20, 1), default_text=path, k="AddrInput"), sg.Text("Enter the directory path")],
+while run : # The main loop to refrech the GUI
+    layout1 = [  [sg.InputText(size=(20, 1), default_text=path, k="AddrInput"), sg.Text("Enter the directory path")], # The layout of the first window
                 [sg.Combo(comboList, k="FunctionInput"), sg.Text("Choose the function")],
                 [sg.Button('Next Step')],
             ]
     window1 = sg.Window('main', layout1).Finalize()
 
     run1 = True
-    while run1:
+    while run1: # The loop wich refresh the first window (the window wich ask the user to enter the path and the function)
         event, values = window1.read()
         
-        if event in ('Close Window'):
+        if event in ('Close Window'): # If the user close the window
             run1, run = False
 
-        if event in ('Next Step') and values["FunctionInput"] != "" and values["AddrInput"] != "":
+        if event in ('Next Step') and values["FunctionInput"] != "" and values["AddrInput"] != "": # Check if all fields are filled if the user clic on "Next Step"
 
             path = values["AddrInput"]
             function = values["FunctionInput"]
@@ -57,7 +57,7 @@ while run :
                 run3 = False
                 window1.close()
 
-    while run2:
+    while run2: #the loop wich refresh the second window (the window wich display the result)
         event, values = window2.read()
         if len(layout2) == 3:
             argument = values["ArgumentInput"]
@@ -82,7 +82,7 @@ while run :
             run3 = False
             window2.close()
 
-    while run3:
+    while run3: # The loop wich refresh the third window (path error window)
         event, values = window3.read()
         if event in ('Close Window'):
             run3, run = False
