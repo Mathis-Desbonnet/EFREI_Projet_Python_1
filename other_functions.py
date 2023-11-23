@@ -74,9 +74,17 @@ def mostUsedWords(president: str, irrelevants : list, folderAddr: str = "./clean
     Return a string wich contains the most used words by the chosen president
     """
     presidentWordsList = listOfWords(president, irrelevants, folderAddr)
+    occurences = {}
+    for word in presidentWordsList:
+        nbr = 0
+        for fileName in os.listdir(folderAddr):
+            if president in fileName :
+                nbr += occurrenceOfWords(open(folderAddr + fileName, "r").read(), word)
+        occurences[word] = nbr
+    sortedOccurences = sorted(occurences.items(), key=lambda x: x[1], reverse=True)
     mostUsedWords = ""
-    for keys in list(presidentWordsList)[:10]:
-        mostUsedWords += keys + "\n"
+    for keys in sortedOccurences[:10]:
+        mostUsedWords += keys[0] + "\n"
     mostUsedWords = mostUsedWords[:-1]
     return mostUsedWords
 
