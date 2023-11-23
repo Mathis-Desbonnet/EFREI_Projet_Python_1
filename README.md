@@ -2,7 +2,7 @@
 
 ## Partie 1
 
-Dans cette partie, nous avons développer les fonctions TF-IDF : 
+Dans cette partie, nous avons développé les fonctions TF-IDF : 
 
 - Fonction occurrenceOfWords -> Paramètres : `text` -> **string** et `word` -> **str**. Retourne _counter_ (**in**) le nombre d'occurrence du mot '`word`' dans le texte '`text`'. Cette fonction est principalement utilisé dans la fonction TFCalculator.
 
