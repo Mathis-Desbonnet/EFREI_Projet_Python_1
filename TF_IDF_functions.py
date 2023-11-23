@@ -25,6 +25,7 @@ def TFCalculator(text: str):
         TF[word] = occurrenceOfWords(text, word)
     return TF
 
+
 def IDFCalculator(folderAddr: str = "./cleaned/"):
     filesName = os.listdir(folderAddr)
     allWords = []
@@ -52,7 +53,7 @@ def IDFCalculator(folderAddr: str = "./cleaned/"):
     return IDF
 
 
-def TFIDFList(folderAddr : str="./cleaned/"):
+def TFIDFList(folderAddr: str = "./cleaned/"):
     TFIDF = []
     TFTab = []
     IDF = IDFCalculator(folderAddr)

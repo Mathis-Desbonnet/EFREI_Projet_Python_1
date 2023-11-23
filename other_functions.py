@@ -51,25 +51,25 @@ def importantWords(matrice: list, wordsList: list):
 # print(importantWords(TFIDFList("./test/")[0], TFIDFList("./test/")[1]))
 
 
-def listOfWords(president : str, irrelevants : list, folderAddr : str) :
-    '''
+def listOfWords(president: str, irrelevants: list, folderAddr: str):
+    """
     Return a dictionnary with the words used by the chosen president (except the irrelevants words)
-    '''
+    """
     relevantUsedWords = []
     for fileName in os.listdir(folderAddr):
-        if president in fileName :
+        if president in fileName:
             text = open(folderAddr + fileName, "r").read()
             allUsedWords = list(set(text.split()))
-            for keys in allUsedWords :
-                if keys not in irrelevants :
-                        relevantUsedWords.append(keys)
+            for keys in allUsedWords:
+                if keys not in irrelevants:
+                    relevantUsedWords.append(keys)
     return relevantUsedWords
 
-#print(listOfWords("Macron", irrelevantWords(TFIDFList("./cleaned/")[0], TFIDFList("./cleaned/")[1])))
+
+# print(listOfWords("Macron", irrelevantWords(TFIDFList("./cleaned/")[0], TFIDFList("./cleaned/")[1])))
 
 
-
-def mostUsedWords(president: str, irrelevants : list, folderAddr: str = "./cleaned/"):
+def mostUsedWords(president: str, irrelevants: list, folderAddr: str = "./cleaned/"):
     """
     Return a string wich contains the most used words by the chosen president
     """
@@ -81,10 +81,10 @@ def mostUsedWords(president: str, irrelevants : list, folderAddr: str = "./clean
     return mostUsedWords
 
 
-#print(mostUsedWords("Macron"))
+# print(mostUsedWords("Macron"))
 
 
-def whoTalkAbout(word: str, irrelevants : list, folderAddr: str = "./cleaned/"):
+def whoTalkAbout(word: str, irrelevants: list, folderAddr: str = "./cleaned/"):
     """
     Return the names of the presidents who talked about a chosen word and the name of the president who has talked the most about it
     """
@@ -101,20 +101,23 @@ def whoTalkAbout(word: str, irrelevants : list, folderAddr: str = "./cleaned/"):
             hasTalkAbout += president + "\n"
             occurences = 0
             for fileName in os.listdir(folderAddr):
-                if president in fileName :
-                    occurences += occurrenceOfWords(open(folderAddr + fileName, "r").read(), word)
+                if president in fileName:
+                    occurences += occurrenceOfWords(
+                        open(folderAddr + fileName, "r").read(), word
+                    )
             if maxi[1] < occurences:
                 maxi = [president, occurences]
     if hasTalkAbout == "":
         hasTalkAbout = "Nobody talked about this word..."
-    else : hasTalkAbout += "\n" + "The president who talked the most about is : " + maxi[0]
+    else:
+        hasTalkAbout += "\n" + "The president who talked the most about is : " + maxi[0]
     return hasTalkAbout
 
 
-#print(whoTalkAbout("nation"))
+# print(whoTalkAbout("nation"))
 
 
-def firstToSay(words: list, irrelevants : list, folderAddr : str):
+def firstToSay(words: list, irrelevants: list, folderAddr: str):
     """
     Return the name of the president who talked about the words the first
     """
@@ -139,7 +142,7 @@ def firstToSay(words: list, irrelevants : list, folderAddr : str):
 # print(firstToSay(["climat"]))
 
 
-def universalWords(wordsList: list, irrelevants : list, folderAddr: str = "./cleaned/"):
+def universalWords(wordsList: list, irrelevants: list, folderAddr: str = "./cleaned/"):
     """
     Return a string wich contains the words used by all the presidents (except the irrelevants words)
     """
@@ -153,15 +156,17 @@ def universalWords(wordsList: list, irrelevants : list, folderAddr: str = "./cle
         if not word in irrelevants:
             val = True
             counter = 0
-            while val and counter < len(presidentWordsList) :
+            while val and counter < len(presidentWordsList):
                 president = presidentWordsList[counter]
-                if not word in president :
+                if not word in president:
                     val = False
                 counter += 1
-            universals += (word + "\n")*val
-    if universals == "" :
+            universals += (word + "\n") * val
+    if universals == "":
         return "No important word has been used by all the presidents."
-    else : return universals
+    else:
+        return universals
+
 
 # print()
 # print(universalWords(TFIDFList()[1] , irrelevants))
