@@ -75,12 +75,14 @@ while run : # The main loop to refrech the GUI
                     argument = argument.split()
                     output = of.firstToSay(argument, irrelevants, path)
                 case "universalWords": output = of.universalWords(tfidfWords, irrelevants, path)
+                
             Output.Update("")
             if type(output) == list:
                 for i in output:
                     Output.Update(i + "\n", append=True)
             else : Output.Update(output)
             Output.Update(disabled=True)
+            
         if event in ('Previous'):
             run1 = False
             run2 = False
