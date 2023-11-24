@@ -67,14 +67,19 @@ while run : # The main loop to refrech the GUI
         if event == "Go":
             Output.Update(disabled=False)
             match function: 
-                case "irrelevantWords": Output.Update(irrelevants)
-                case "importantWords": Output.Update(of.importantWords(tfidfScore, tfidfWords))
-                case "mostUsedWords": Output.Update(of.mostUsedWords(argument, irrelevants, path))
-                case "whoTalkAbout": Output.Update(of.whoTalkAbout(argument, path))
+                case "irrelevantWords": output = irrelevants
+                case "importantWords": output = of.importantWords(tfidfScore, tfidfWords)
+                case "mostUsedWords": output = of.mostUsedWords(argument, irrelevants, path)
+                case "whoTalkAbout": output = of.whoTalkAbout(argument, path)
                 case "firstToSay":
                     argument = argument.split()
-                    Output.Update(of.firstToSay(argument, irrelevants, path))
-                case "universalWords": Output.Update(of.universalWords(tfidfWords, irrelevants, path))
+                    output = of.firstToSay(argument, irrelevants, path)
+                case "universalWords": output = of.universalWords(tfidfWords, irrelevants, path)
+            Output.Update("")
+            if type(output) == list:
+                for i in output:
+                    Output.Update(i + "\n", append=True)
+            else : Output.Update(output)
             Output.Update(disabled=True)
         if event in ('Previous'):
             run1 = False
