@@ -24,3 +24,5 @@ pip install -r requirements.txt
    g) Fonction universalWords -> Indique le(s) mot(s) que tous les présidents ont dit (sans les mots ayant un TF-IDF de 0).
 4) Saisir le mot dans _Enter the arguments_ (si nécessaire)
 5) Appuyer sur GO
+
+Le lien de notre github : [https://github.com/Mathis-Desbonnet/pychatbot-mathis-arnaud-bdx/](https://github.com/Mathis-Desbonnet/pychatbot-mathis-arnaud-bdx/)
