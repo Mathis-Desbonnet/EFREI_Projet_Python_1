@@ -6,7 +6,7 @@ Dans cette partie, nous avons développé le menu qui utilise les fonctions pré
 
 ### Installation des modules :
 
-Pour installer les modules nécessaires au fonctionnement du menu, merci de saisir la commande suivante : 
+Pour installer les modules nécessaires au fonctionnement du menu, merci de saisir la commande suivante dans un terminal (attention à bien ajouter `python` et `pip` au `path`) : 
 
 ```
 pip install -r requirements.txt
