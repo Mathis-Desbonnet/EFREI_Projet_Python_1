@@ -1,8 +1,10 @@
 # Projet Python 1 - Mathis et Arnaud - Groupe BDX
 
-## Partie 4
+## Partie 5
 
-Dans cette partie, nous avons remis le code au propre, créer les doctypes et les commentaires.
+Dans cette partie, nous avons `merge` toutes les branches vers _main_.
+
+Ainsi, dans cette branche _main_, vous retrouverez notre version **FINALE**.
 
 ### Installation des modules :
 
