@@ -16,5 +16,11 @@ pip install -r requirements.txt
 
 1) Renseigner le chemin d'accès (en relatif) du dossier comprenant les textes **CLEANED**.
 2) Choisir la fonction à exécuter.
-3) Saisir le mot (si nécessaire)
-4) Appuyer sur GO
+   a) Fonction irrelevantWords -> Donne les mots ayant un TF-IDF de 0 dans tous les fichiers/
+   b) Fonction importantWords -> Donne les mots ayant le score TF-IDF le plus élevé.
+   c) Fonction mostUsedWords -> Donne les mots le(s) plus répété(s) par le président choisi dans _Enter the arguments_.
+   d) Fonction whoTalkAbout -> Indique le(s) président(s) qui a/ont dit le mot choisi dans _Enter the arguments_ ainsi que celui qui l'a le plus dit.
+   f) Fonction firstToSay -> Indique le président qui a dit le mot choisi dans _Enter the arguments_ en premier. 
+   g) Fonction universalWords -> Indique le(s) mot(s) que tous les présidents ont dit (sans les mots ayant un TF-IDF de 0).
+4) Saisir le mot dans _Enter the arguments_ (si nécessaire)
+5) Appuyer sur GO
