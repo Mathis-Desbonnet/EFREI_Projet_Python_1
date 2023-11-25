@@ -17,3 +17,5 @@ Dans cette partie, nous avons développé les fonctions qui utilise les résulta
 - Fonction firstToSay -> Paramètres : `words` -> **list**, `irrelevants` -> **liste** et `folderAddr` -> **string**. Retourne _president_ le(s) nom(s) du/des président(s) qui a/ont parlé(s) en premier du/des mots `words`. Sinon, il renvoie "Nobody talked about this word or maybe it's an irrelevant one...".
 
 - Fonction universalWords -> Paramètres : `wordsList` -> **list**, `irrelevants` -> **liste** et `folderAddr` -> **string**. Retourne _universals_ le(s) mot(s) utilisé(s) par tous les présidents. Sinon il renvoie "No important word has been used by all the presidents.".
+
+Le lien de notre github : [https://github.com/Mathis-Desbonnet/pychatbot-mathis-arnaud-bdx/](https://github.com/Mathis-Desbonnet/pychatbot-mathis-arnaud-bdx/)
