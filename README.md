@@ -1,8 +1,10 @@
 # Projet Python 1 - Mathis et Arnaud - Groupe BDX
 
-## Partie 4
+## Partie 5
 
-Dans cette partie, nous avons modifier quelque partie du code, mais surtout ajouter les _doctypes_ et commentaires : 
+Dans cette partie, nous avons `merge` toutes nos branches pour arriver à la version finale.
+
+Vous trouverez donc dans notre branche main notre version **FINALE !**
 
 ### Installation des modules :
 
@@ -22,7 +24,7 @@ pip install -r requirements.txt
    d) Fonction whoTalkAbout -> Indique le(s) président(s) qui a/ont dit le mot choisi dans _Enter the arguments_ ainsi que celui qui l'a le plus dit.
    f) Fonction firstToSay -> Indique le président qui a dit le mot choisi dans _Enter the arguments_ en premier. 
    g) Fonction universalWords -> Indique le(s) mot(s) que tous les présidents ont dit (sans les mots ayant un TF-IDF de 0).
-4) Saisir le mot dans _Enter the arguments_ (si nécessaire)
-5) Appuyer sur GO
+3) Saisir le mot dans _Enter the arguments_ (si nécessaire)
+4) Appuyer sur GO
 
 Le lien de notre github : [https://github.com/Mathis-Desbonnet/pychatbot-mathis-arnaud-bdx/](https://github.com/Mathis-Desbonnet/pychatbot-mathis-arnaud-bdx/)

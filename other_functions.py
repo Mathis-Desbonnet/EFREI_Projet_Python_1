@@ -84,8 +84,7 @@ def listOfWords(president : str, irrelevants : list, folderAddr : str) :
                         relevantUsedWords.append(keys)
     return relevantUsedWords
 
-
-def mostUsedWords(president: str, irrelevants : list, folderAddr: str = "./cleaned/"):
+def mostUsedWords(president: str, irrelevants: list, folderAddr: str = "./cleaned/"):
     """
     This function returns a list which contains the most frequently used words by a specified president, excluding a given list of irrelevant words.
     The function use listOfWords() to get the list of relevant words used by the president.
@@ -113,7 +112,7 @@ def mostUsedWords(president: str, irrelevants : list, folderAddr: str = "./clean
     return mostUsedWords
 
 
-def whoTalkAbout(word: str, irrelevants : list, folderAddr: str = "./cleaned/"):
+def whoTalkAbout(word: str, irrelevants: list, folderAddr: str = "./cleaned/"):
     """
     This function returns the names of the presidents who talked about a chosen word and the name of the president who has talked the most about it.
     The function use listOfWords() to get the list of relevant words used by each president.
