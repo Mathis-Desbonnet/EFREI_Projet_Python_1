@@ -100,7 +100,7 @@ def TFIDFListPart2(folderAddr: str = "./cleaned/"):
     )  # Return the TF-IDF list and the list of each unique words
 
 
-print(TFIDFListPart2())
+# print(TFIDFListPart2())
 
 
 def produitScalaire(list1, list2):
@@ -134,48 +134,107 @@ def bestDocument(TFIDFCorpus, TFIDFQuestion):
     return os.listdir("./cleaned/")[maxIndex]
 
 
-print(
-    bestDocument(
-        TFIDFListPart2()[0],
-        TFIDFQuestion(
-            tokenQuestion(
-                "Peux-tu me dire comment une nation peut-elle prendre soin du climat ?"
-            )[1],
-            "./cleaned/",
-        )[0],
-    )
-)
+def getMaxTFIDFQuestion(TFIDFQuestion, listQuestion):
+    return listQuestion[TFIDFQuestion.index(max(TFIDFQuestion))]
 
 
-print(
-    tokenQuestion(
-        "Peux-tu me dire comment une nation peut-elle prendre soin du climat ?"
-    )[0]
-)
+def getSentence(maxTFIDFQuestion, bestDocument):
+    file = open("./speeches/" + bestDocument, "r")
+    sentences = file.read().split(".")
+    for sentence in sentences:
+        if maxTFIDFQuestion in sentence:
+            return sentence
 
-print(
-    searchInteristingTerms(
-        tokenQuestion(
-            "Peux-tu me dire comment une nation peut-elle prendre soin du climat ?"
-        )[0],
-        "./cleaned/",
-    )
-)
+
+def betterAnswer(answer, question):
+    question_starters = {
+        "Comment": "Après analyse, ",
+        "Pourquoi": "Car, ",
+        "Peux-tu": "Oui, bien sûr!",
+    }
+
+    firstQuestionWord = question.split()[0]
+    if answer != None:
+        answer = answer.replace("\n", "")
+    else:
+        return "Il n'y a pas de réponse à votre question dans les textes données...."
+    if firstQuestionWord in question_starters:
+        return (question_starters[firstQuestionWord] + answer.lower() + ".")
+    else:
+        return (answer + ".")
+
+
+question = input("Saisir la question : ")
+
+# print(tokenQuestion(question)[0])
+
+# print(
+#     searchInteristingTerms(
+#         tokenQuestion(question)[0],
+#         "./cleaned/",
+#     )
+# )
 
 # print(
 #     TFQuestion(
 #         tokenQuestion(
-#             "Peux-tu me dire comment une nation peut-elle prendre soin du climat ?"
+#             question
 #         )[1],
 #         "./cleaned/",
 #     )
 # )
 
+# print(
+#     TFIDFQuestion(
+#         tokenQuestion(question)[1],
+#         "./cleaned/",
+#     )
+# )
+
+# print(
+#     bestDocument(
+#         TFIDFListPart2()[0],
+#         TFIDFQuestion(
+#             tokenQuestion(question)[1],
+#             "./cleaned/",
+#         )[0],
+#     )
+# )
+
+# print(
+#     getMaxTFIDFQuestion(
+#         TFIDFQuestion(
+#             tokenQuestion(question)[1],
+#             "./cleaned/",
+#         )[0],
+#         TFIDFQuestion(
+#             tokenQuestion(question)[1],
+#             "./cleaned/",
+#         )[1],
+#     )
+# )
+
 print(
-    TFIDFQuestion(
-        tokenQuestion(
-            "Peux-tu me dire comment une nation peut-elle prendre soin du climat ?"
-        )[1],
-        "./cleaned/",
+    betterAnswer(
+        getSentence(
+            getMaxTFIDFQuestion(
+                TFIDFQuestion(
+                    tokenQuestion(question)[1],
+                    "./cleaned/",
+                )[0],
+                TFIDFQuestion(
+                    tokenQuestion(question)[1],
+                    "./cleaned/",
+                )[1],
+            ),
+            bestDocument(
+                TFIDFListPart2()[0],
+                TFIDFQuestion(
+                    tokenQuestion(question)[1],
+                    "./cleaned/",
+                )[0],
+            ),
+        ),
+        question,
     )
 )

@@ -46,7 +46,7 @@ def TFCalculator(text: str):
     return TF
 
 
-print(TFCalculator(open("./cleaned/Nomination_Chirac1.txt", "r").read()))
+# print(TFCalculator(open("./cleaned/Nomination_Chirac1.txt", "r").read()))
 
 
 def IDFCalculator(folderAddr: str = "./cleaned/"):
@@ -95,7 +95,7 @@ def IDFCalculator(folderAddr: str = "./cleaned/"):
     return IDF
 
 
-print(IDFCalculator())
+# print(IDFCalculator())
 
 
 def TFIDFList(folderAddr: str = "./cleaned/"):
