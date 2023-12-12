@@ -75,12 +75,13 @@ def cleanPresidentText(speechFolderIn: str = "./speeches/", speechFolderOut: str
     speechFolderIn (str): The path to the input folder containing the original text files. Defaults to "./speeches/".
     speechFolderOut (str): The path to the output folder where the cleaned text files will be written. Defaults to "./cleaned/".
     """
-    os.mkdir(speechFolderOut, exist_ok=True) # Create the output folder if it does not exist
-    fileName = os.listdir(speechFolderIn) # Get a list of all file names in the specified folder
-    for file in fileName:
+    try : os.mkdir(speechFolderOut) # Create the output folder if it does not exist
+    except FileExistsError: pass
+    file = os.listdir(speechFolderIn) # Get a list of all file names in the specified folder
+    for fileName in file:
         if ".txt" in fileName: # Check if the file is a text file
-            fileIn = open(speechFolderIn + file, "r")
-            fileOut = open(speechFolderOut + file, "w")
+            fileIn = open(speechFolderIn + fileName, "r")
+            fileOut = open(speechFolderOut + fileName, "w")
             fileInLines = fileIn.readlines()
             for lignes in fileInLines: # Read the file line by line
                 for char in lignes:
@@ -90,7 +91,7 @@ def cleanPresidentText(speechFolderIn: str = "./speeches/", speechFolderOut: str
                         fileOut.write(char)
             fileIn.close()
             fileOut.close()
-
+            
 
 def deletePonctuationSign(cleanSpeechFolder: str = "./cleaned/"):
     """
@@ -110,11 +111,25 @@ def deletePonctuationSign(cleanSpeechFolder: str = "./cleaned/"):
             fileOut.close()
             fileOut = open(cleanSpeechFolder + file, "w")
             for lignes in fileLines: # Read the file line by line
-                for char in lignes:
-                    if char in ".,;:!?": # Check if the character is a punctuation mark
+                for i in range (len(lignes)) :
+                    if lignes[i] in ".,;:!?": # Check if the character is a punctuation mark
                         fileOut.write("") # Remove the punctuation mark
-                    elif char in '''-'"''':
+                    elif lignes[i] in '''-"''':
                         fileOut.write(" ") # Replace the punctuation mark wich are part of conpound words by a space
+                    elif lignes[i] in "éëèê" :
+                        fileOut.write("e")
+                    elif lignes[i] in "àäâ" :
+                        fileOut.write("a")
+                    elif lignes[i] in "ùüû" :
+                        fileOut.write("u")
+                    elif lignes[i] in "îïì" :
+                        fileOut.write("i")
+                    elif lignes[i] in "ôöò" :
+                        fileOut.write("o")
+                    elif lignes[i] in "ç" :
+                        fileOut.write("c")
+                    elif lignes[i] == "'" :
+                        fileOut.write("e ") # Convert words like l', d', qu'... into le, de, que...
                     else:
-                        fileOut.write(char)
+                        fileOut.write(lignes[i])
             fileOut.close()
