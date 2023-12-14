@@ -16,9 +16,22 @@ functionsList = [ # Create a list of all the functions the user can use.
 ]
 
 themesList = [ # Create a list of all the functions the user can use.
-    "climat",
-    "nourriture",
-    "les pauvres"
+    "Pas de pauvreté",
+    "Faim zéro",
+    "Bonne santé",
+    "Éducation",
+    "Égalité des sexes",
+    "Eau propre",
+    "Énergie propre",
+    "Travail décent",
+    "Industrie et innovation",
+    "Inégalités réduites",
+    "Villes durables",
+    "Consommation responsable",
+    "Changement climatique",
+    "Vie aquatique",
+    "Vie terrestre",
+    "Paix et justice"
 ]
 path = ""
 
