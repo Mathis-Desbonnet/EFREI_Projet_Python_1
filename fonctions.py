@@ -65,7 +65,7 @@ def printPresidentNames(listOfPresidents: list):
             arleadyPrinted.append(president) # Add the president's name to the list of already printed names
 
 
-def cleanPresidentText(speechFolderIn: str = "./speeches/", speechFolderOut: str = "./cleaned/"):
+def cleanPresidentText(speechFolderIn: str = "speeches"):
     """
     This function reads the text files from a given input folder, converts all uppercase letters to lowercase, 
     and writes the cleaned text to new files in a given output folder.
@@ -75,13 +75,14 @@ def cleanPresidentText(speechFolderIn: str = "./speeches/", speechFolderOut: str
     speechFolderIn (str): The path to the input folder containing the original text files. Defaults to "./speeches/".
     speechFolderOut (str): The path to the output folder where the cleaned text files will be written. Defaults to "./cleaned/".
     """
-    try : os.mkdir(speechFolderOut) # Create the output folder if it does not exist
+    folderInName = "./" + speechFolderIn + "/"
+    try : os.mkdir("./" + speechFolderIn + "_cleaned/") # Create the output folder if it does not exist
     except FileExistsError: pass
-    file = os.listdir(speechFolderIn) # Get a list of all file names in the specified folder
+    file = os.listdir(folderInName) # Get a list of all file names in the specified folder
     for fileName in file:
         if ".txt" in fileName: # Check if the file is a text file
-            fileIn = open(speechFolderIn + fileName, "r")
-            fileOut = open(speechFolderOut + fileName, "w")
+            fileIn = open(folderInName + fileName, "r")
+            fileOut = open("./" + speechFolderIn + "_cleaned/" + fileName, "w")
             fileInLines = fileIn.readlines()
             for lignes in fileInLines: # Read the file line by line
                 for char in lignes:
@@ -91,7 +92,8 @@ def cleanPresidentText(speechFolderIn: str = "./speeches/", speechFolderOut: str
                         fileOut.write(char)
             fileIn.close()
             fileOut.close()
-            
+
+cleanPresidentText()
 
 def deletePonctuationSign(cleanSpeechFolder: str = "./cleaned/"):
     """

@@ -1,5 +1,6 @@
 import PySimpleGUI as sg # Import the library wich will be used to create the GUI.
 import os
+from fonctions import deletePonctuationSign, cleanPresidentText
 import TF_IDF_functions as tfidf
 import other_functions as of
 
@@ -65,11 +66,14 @@ def firstWindow(run, window): # Create the first window (the one where the user 
 
 
 def LoadingWindow(run, layout2, path, function): # Create a loading window (the one that will be displayed while the program is creating all the needed variables).
+    cleanPresidentText(path)
+    deletePonctuationSign(path)
+    pathCleaned = path + "_cleaned"
     layout4 = [[sg.Text("Chargement.....")]]
     window4 = sg.Window("LoadingWindow", layout4, keep_on_top=True).Finalize()
     event, values = window4.read(100)
-    tfidfScore = tfidf.TFIDFList(path)[0]
-    tfidfWords = tfidf.TFIDFList(path)[1]
+    tfidfScore = tfidf.TFIDFList(pathCleaned)[0]
+    tfidfWords = tfidf.TFIDFList(pathCleaned)[1]
     irrelevants = of.irrelevantWords(tfidfScore, tfidfWords)
     while run:
         window2 = sg.Window("next", layout2).Finalize()
@@ -81,7 +85,7 @@ def LoadingWindow(run, layout2, path, function): # Create a loading window (the 
             window2,
             layout2,
             Output,
-            path, # The path to the directory, entered by the user in the first window.
+            pathCleaned, # The path to the directory, entered by the user in the first window.
             function, # The function the user want to use, entered by the user in the first window.
             tfidfScore, # The list of the TFIDF scores, create by using TFIDFList function.
             tfidfWords, # The list of the words, create by using TFIDFList function.
@@ -89,7 +93,7 @@ def LoadingWindow(run, layout2, path, function): # Create a loading window (the 
         )
 
 
-def secondWindow(run, window, layout, Output, path, functions, tfidfScore, tfidfWords, irrelevants):
+def secondWindow(run, window, layout, Output, pathCleaned, functions, tfidfScore, tfidfWords, irrelevants):
     while run:
         event, values = window.read()
         if len(layout) == 3:
@@ -105,14 +109,14 @@ def secondWindow(run, window, layout, Output, path, functions, tfidfScore, tfidf
                 case "importantWords":
                     output = of.importantWords(tfidfScore, tfidfWords)
                 case "mostUsedWords":
-                    output = of.mostUsedWords(argument, irrelevants, path)
+                    output = of.mostUsedWords(argument, irrelevants, pathCleaned)
                 case "whoTalkAbout":
-                    output = of.whoTalkAbout(argument, path)
+                    output = of.whoTalkAbout(argument, pathCleaned)
                 case "firstToSay":
                     argument = argument.split()
-                    output = of.firstToSay(argument, irrelevants, path)
+                    output = of.firstToSay(argument, irrelevants, pathCleaned)
                 case "universalWords":
-                    output = of.universalWords(tfidfWords, irrelevants, path)
+                    output = of.universalWords(tfidfWords, irrelevants, pathCleaned)
             Output.Update("")
             if type(output) == list: # Iterate tough the output if it's a list to display it in the output box.
                 for i in output:
