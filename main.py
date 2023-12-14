@@ -37,7 +37,7 @@ def firstWindow(run, window): # Create the first window (the one where the user 
             and values["FunctionInput"] != ""
             and values["AddrInput"] != ""
         ):
-            path = values["AddrInput"]
+            path = "./" + values["AddrInput"] + "/"
             function = values["FunctionInput"]
 
             if os.path.exists(path) == False: # Checl if the path entered by the user exist.
@@ -67,8 +67,8 @@ def firstWindow(run, window): # Create the first window (the one where the user 
 
 def LoadingWindow(run, layout2, path, function): # Create a loading window (the one that will be displayed while the program is creating all the needed variables).
     cleanPresidentText(path)
-    deletePonctuationSign(path)
-    pathCleaned = path + "_cleaned"
+    pathCleaned = path[:-1] + "_cleaned/"
+    deletePonctuationSign(pathCleaned)
     layout4 = [[sg.Text("Chargement.....")]]
     window4 = sg.Window("LoadingWindow", layout4, keep_on_top=True).Finalize()
     event, values = window4.read(100)
@@ -85,6 +85,7 @@ def LoadingWindow(run, layout2, path, function): # Create a loading window (the 
             window2,
             layout2,
             Output,
+            path,
             pathCleaned, # The path to the directory, entered by the user in the first window.
             function, # The function the user want to use, entered by the user in the first window.
             tfidfScore, # The list of the TFIDF scores, create by using TFIDFList function.
@@ -93,7 +94,7 @@ def LoadingWindow(run, layout2, path, function): # Create a loading window (the 
         )
 
 
-def secondWindow(run, window, layout, Output, pathCleaned, functions, tfidfScore, tfidfWords, irrelevants):
+def secondWindow(run, window, layout, Output, path, pathCleaned, functions, tfidfScore, tfidfWords, irrelevants):
     while run:
         event, values = window.read()
         if len(layout) == 3:
@@ -111,7 +112,7 @@ def secondWindow(run, window, layout, Output, pathCleaned, functions, tfidfScore
                 case "mostUsedWords":
                     output = of.mostUsedWords(argument, irrelevants, pathCleaned)
                 case "whoTalkAbout":
-                    output = of.whoTalkAbout(argument, pathCleaned)
+                    output = of.whoTalkAbout(argument, irrelevants, pathCleaned)
                 case "firstToSay":
                     argument = argument.split()
                     output = of.firstToSay(argument, irrelevants, pathCleaned)
@@ -128,7 +129,7 @@ def secondWindow(run, window, layout, Output, pathCleaned, functions, tfidfScore
             run = False
             window.close()
             layout1 = [
-                [sg.InputText(size=(20, 1), default_text=path, k="AddrInput"), sg.Text("Enter the directory path")],
+                [sg.InputText(size=(20, 1), default_text=path[2:-1], k="AddrInput"), sg.Text("Enter the directory path")],
                 [sg.Combo(comboList, k="FunctionInput"), sg.Text("Choose the function")],
                 [sg.Button("Next Step")]
             ]

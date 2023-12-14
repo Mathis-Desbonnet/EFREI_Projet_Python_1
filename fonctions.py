@@ -65,7 +65,7 @@ def printPresidentNames(listOfPresidents: list):
             arleadyPrinted.append(president) # Add the president's name to the list of already printed names
 
 
-def cleanPresidentText(speechFolderIn: str = "speeches"):
+def cleanPresidentText(speechFolderIn: str = "./speeches/"):
     """
     This function reads the text files from a given input folder, converts all uppercase letters to lowercase, 
     and writes the cleaned text to new files in a given output folder.
@@ -75,14 +75,13 @@ def cleanPresidentText(speechFolderIn: str = "speeches"):
     speechFolderIn (str): The path to the input folder containing the original text files. Defaults to "./speeches/".
     speechFolderOut (str): The path to the output folder where the cleaned text files will be written. Defaults to "./cleaned/".
     """
-    folderInName = "./" + speechFolderIn + "/"
-    try : os.mkdir("./" + speechFolderIn + "_cleaned/") # Create the output folder if it does not exist
+    try : os.mkdir(speechFolderIn[:-1] + "_cleaned/") # Create the output folder if it does not exist
     except FileExistsError: pass
-    file = os.listdir(folderInName) # Get a list of all file names in the specified folder
+    file = os.listdir(speechFolderIn) # Get a list of all file names in the specified folder
     for fileName in file:
         if ".txt" in fileName: # Check if the file is a text file
-            fileIn = open(folderInName + fileName, "r")
-            fileOut = open("./" + speechFolderIn + "_cleaned/" + fileName, "w")
+            fileIn = open(speechFolderIn + fileName, "r")
+            fileOut = open(speechFolderIn[:-1] + "_cleaned/" + fileName, "w")
             fileInLines = fileIn.readlines()
             for lignes in fileInLines: # Read the file line by line
                 for char in lignes:
@@ -93,7 +92,7 @@ def cleanPresidentText(speechFolderIn: str = "speeches"):
             fileIn.close()
             fileOut.close()
 
-cleanPresidentText()
+#cleanPresidentText("./speeches/")
 
 def deletePonctuationSign(cleanSpeechFolder: str = "./cleaned/"):
     """
@@ -105,13 +104,13 @@ def deletePonctuationSign(cleanSpeechFolder: str = "./cleaned/"):
     cleanSpeechFolder (str): The path to the folder containing the cleaned text files. Defaults to "./cleaned/".
     """
 
-    fileName = os.listdir(cleanSpeechFolder) # Get a list of all file names in the specified folder
-    for file in fileName:
+    file = os.listdir(cleanSpeechFolder) # Get a list of all file names in the specified folder
+    for fileName in file:
         if ".txt" in fileName: # Check if the file is a text file
-            fileOut = open(cleanSpeechFolder + file, "r")
+            fileOut = open(cleanSpeechFolder + fileName, "r")
             fileLines = fileOut.readlines()
             fileOut.close()
-            fileOut = open(cleanSpeechFolder + file, "w")
+            fileOut = open(cleanSpeechFolder + fileName, "w")
             for lignes in fileLines: # Read the file line by line
                 for i in range (len(lignes)) :
                     if lignes[i] in ".,;:!?": # Check if the character is a punctuation mark
@@ -135,3 +134,5 @@ def deletePonctuationSign(cleanSpeechFolder: str = "./cleaned/"):
                     else:
                         fileOut.write(lignes[i])
             fileOut.close()
+
+#deletePonctuationSign("./speeches_cleaned/")
