@@ -16,6 +16,7 @@ functionsList = [ # Create a list of all the functions the user can use.
 ]
 
 themesList = [ # Create a list of all the functions the user can use.
+    "Pas de thème particulier",
     "Pas de pauvreté",
     "Faim zéro",
     "Bonne santé",
@@ -33,6 +34,13 @@ themesList = [ # Create a list of all the functions the user can use.
     "Vie terrestre",
     "Paix et justice"
 ]
+
+themeOfEachText = { # Create a dictionary wich associate each text to a theme
+    "theme1" : [],
+    "theme2" : []
+}
+
+
 path = ""
 
 layout1 = [ # Create the layout of the first window.
@@ -41,7 +49,7 @@ layout1 = [ # Create the layout of the first window.
     [sg.Button("Change Mode"), sg.Text("Functions mode", key="textMode")],
     [sg.Button("Next Step")], #Create the button to go to the second window.
 ]
-window1 = sg.Window("main", layout1).Finalize()
+window1 = sg.Window("Main menu", layout1).Finalize()
 
 
 def firstWindow(run, window): # Create the first window (the one where the user will enter the path and the function he wish to use).
@@ -78,17 +86,25 @@ def firstWindow(run, window): # Create the first window (the one where the user 
                 window.close()
                 ErrorWindow(True, window3)
             else:
-                if values["FunctionInput"] in ["whoTalkAbout", "firstToSay", "mostUsedWords"]:
+                if mode == "Functions Mode" :
+                    if values["FunctionInput"] in ["whoTalkAbout", "firstToSay", "mostUsedWords"]:
+                        layout2 = [ # Create the second window with an input box for the argument if the function the user wish to use require one.
+                            [sg.InputText(size=(20, 1), k="ArgumentInput"), sg.Text("Enter the arguments")],
+                            [sg.Multiline(size=(40, 20), disabled=True, key="Output")],
+                            [sg.Button("Go"), sg.Push(), sg.Button("Previous")],
+                        ]
+                    else:
+                        layout2 = [ # Create the second window without an input box for the argument if the function the user wish to use doesn't require one.
+                            [sg.Push(), sg.Multiline(size=(40, 20), disabled=True, key="Output")],
+                            [sg.Button("Go"), sg.Push(), sg.Button("Previous")],
+                        ]
+                else :
                     layout2 = [ # Create the second window with an input box for the argument if the function the user wish to use require one.
-                        [sg.InputText(size=(20, 1), k="ArgumentInput"), sg.Text("Enter the arguments")],
-                        [sg.Multiline(size=(40, 20), disabled=True, key="Output")],
-                        [sg.Button("Go"), sg.Push(), sg.Button("Previous")],
-                    ]
-                else:
-                    layout2 = [ # Create the second window without an input box for the argument if the function the user wish to use doesn't require one.
-                        [sg.Push(), sg.Multiline(size=(40, 20), disabled=True, key="Output")],
-                        [sg.Button("Go"), sg.Push(), sg.Button("Previous")],
-                    ]
+                            [sg.Multiline(size=(40, 20), disabled=True, key="Output")],
+                            [sg.Text("Ask your question")],
+                            [sg.InputText(size=(40, 1), k="ArgumentInput")],
+                            [sg.Button("Go"), sg.Push(), sg.Button("Previous")]
+                        ]
 
                 run = False
                 window.close()
@@ -106,7 +122,7 @@ def LoadingWindow(run, layout2, path, function): # Create a loading window (the 
     tfidfWords = tfidf.TFIDFList(pathCleaned)[1]
     irrelevants = of.irrelevantWords(tfidfScore, tfidfWords)
     while run:
-        window2 = sg.Window("next", layout2).Finalize()
+        window2 = sg.Window("Functions", layout2).Finalize()
         Output = window2.find_element("Output")
         run = False
         window4.close()
@@ -160,10 +176,11 @@ def secondWindow(run, window, layout, Output, path, pathCleaned, functions, tfid
             window.close()
             layout1 = [
                 [sg.InputText(size=(20, 1), default_text=path[2:-1], k="AddrInput"), sg.Text("Enter the directory path")],
-                [sg.Combo(comboList, k="FunctionInput"), sg.Text("Choose the function")],
+                [sg.Combo(functionsList, k="FunctionInput"), sg.Text("Choose the function")],
+                [sg.Button("Change Mode"), sg.Text("Functions mode", key="textMode")],
                 [sg.Button("Next Step")]
             ]
-            window1 = sg.Window("main", layout1).Finalize()
+            window1 = sg.Window("Main menu", layout1).Finalize()
             firstWindow(True, window1) # Reopen the first window.
 
 
