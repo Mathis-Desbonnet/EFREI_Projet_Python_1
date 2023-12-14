@@ -6,7 +6,7 @@ import other_functions as of
 
 
 sg.theme("DarkBlue12")
-comboList = [ # Create a list of all the functions the user can use.
+functionsList = [ # Create a list of all the functions the user can use.
     "irrelevantWords",
     "importantWords",
     "mostUsedWords",
@@ -14,23 +14,40 @@ comboList = [ # Create a list of all the functions the user can use.
     "firstToSay",
     "universalWords",
 ]
+
+themesList = [ # Create a list of all the functions the user can use.
+    "climat",
+    "nourriture",
+    "les pauvres"
+]
 path = ""
 
 layout1 = [ # Create the layout of the first window.
     [sg.InputText(size=(20, 1), default_text=path, k="AddrInput"), sg.Text("Enter the directory path")], # Create the input where the user will enter the path and the text next to the input box.
-    [sg.Combo(comboList, k="FunctionInput"), sg.Text("Choose the function")], # Create the drop down list where the user will choose the function to use.
+    [sg.Combo(functionsList, k="FunctionInput"), sg.Text("Choose the function")], # Create the drop down list where the user will choose the function to use.
+    [sg.Button("Change Mode"), sg.Text("Functions mode", key="textMode")],
     [sg.Button("Next Step")], #Create the button to go to the second window.
 ]
 window1 = sg.Window("main", layout1).Finalize()
 
 
 def firstWindow(run, window): # Create the first window (the one where the user will enter the path and the function he wish to use).
+    mode = "Functions mode"
     print("open first  window")
     while run: # The loop wich will keep the window open until the user close it or click on the "Next Step" button.
         event, values = window.read() # Get the event and the values of the window.
 
         if event in ("Close Window"): # Check if the user closed the window.
             run = False
+
+        if event in ("Change Mode") :
+            if mode == "Functions mode" :
+                mode = "Chatbot mode"
+                window['FunctionInput'].update(values=themesList)
+            else :
+                mode = "Functions mode"
+                window['FunctionInput'].update(values=functionsList)
+            window['textMode'].update(mode)
 
         if ( # Check if the user has entered a path and a function before clicking on the "Next Step" button.
             event in ("Next Step")
