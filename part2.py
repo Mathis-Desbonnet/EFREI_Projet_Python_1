@@ -123,15 +123,15 @@ def calculSimilarité(list1, list2):
     return produitScalaire(list1, list2) / (normeVecteur(list1) * normeVecteur(list2))
 
 
-def bestDocument(TFIDFCorpus, TFIDFQuestion):
+def bestDocument(TFIDFCorpus, TFIDFQuestion, folderAddr):
     max = 0
     maxIndex = 0
-    for i in range(len(os.listdir("./cleaned/"))):
+    for i in range(len(os.listdir(folderAddr))):
         temp = calculSimilarité(TFIDFQuestion, TFIDFCorpus[i])
         if temp >= max:
             maxIndex = i
             max = temp
-    return os.listdir("./cleaned/")[maxIndex]
+    return os.listdir(folderAddr)[maxIndex]
 
 
 def getMaxTFIDFQuestion(TFIDFQuestion, listQuestion):
@@ -220,19 +220,20 @@ print(
             getMaxTFIDFQuestion(
                 TFIDFQuestion(
                     tokenQuestion(question)[1],
-                    "./cleaned/",
+                    "./speeches_cleaned/",
                 )[0],
                 TFIDFQuestion(
                     tokenQuestion(question)[1],
-                    "./cleaned/",
+                    "./speeches_cleaned/",
                 )[1],
             ),
             bestDocument(
-                TFIDFListPart2()[0],
+                TFIDFListPart2("./speeches_cleaned/")[0],
                 TFIDFQuestion(
                     tokenQuestion(question)[1],
-                    "./cleaned/",
+                    "./speeches_cleaned/",
                 )[0],
+                "./speeches_cleaned"
             ),
         ),
         question,

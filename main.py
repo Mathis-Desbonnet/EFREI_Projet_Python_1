@@ -3,6 +3,7 @@ import os
 from fonctions import deletePonctuationSign, cleanPresidentText
 import TF_IDF_functions as tfidf
 import other_functions as of
+import part2 as chatBot
 
 
 sg.theme("DarkBlue12")
@@ -143,7 +144,7 @@ def LoadingWindow(run, layout2, path, function): # Create a loading window (the 
 def secondWindow(run, window, layout, Output, path, pathCleaned, functions, tfidfScore, tfidfWords, irrelevants):
     while run:
         event, values = window.read()
-        if len(layout) == 3:
+        if len(layout) >= 3:
             argument = values["ArgumentInput"]
         if event in ("Close Window"):
             run = False
@@ -164,6 +165,32 @@ def secondWindow(run, window, layout, Output, path, pathCleaned, functions, tfid
                     output = of.firstToSay(argument, irrelevants, pathCleaned)
                 case "universalWords":
                     output = of.universalWords(tfidfWords, irrelevants, pathCleaned)
+
+                case "Pas de thème particulier":
+                    output = chatBot.betterAnswer(
+                        chatBot.getSentence(
+                            chatBot.getMaxTFIDFQuestion(
+                                chatBot.TFIDFQuestion(
+                                    chatBot.tokenQuestion(argument)[1],
+                                    pathCleaned,
+                                )[0],
+                                chatBot.TFIDFQuestion(
+                                    chatBot.tokenQuestion(argument)[1],
+                                    pathCleaned,
+                                )[1],
+                            ),
+                            chatBot.bestDocument(
+                                chatBot.TFIDFListPart2(pathCleaned)[0],
+                                chatBot.TFIDFQuestion(
+                                    chatBot.tokenQuestion(argument)[1],
+                                    pathCleaned,
+                                )[0],
+                                pathCleaned
+                            ),
+                        ),
+                        argument
+                    )
+
             Output.Update("")
             if type(output) == list: # Iterate tough the output if it's a list to display it in the output box.
                 for i in output:
