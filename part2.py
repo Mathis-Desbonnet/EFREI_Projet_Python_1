@@ -1,5 +1,6 @@
 import os
-from TF_IDF_functions import IDFCalculator
+from TF_IDF_functions import IDFCalculator, TFCalculator
+import math
 
 
 def tokenQuestion(question: str):
@@ -58,40 +59,182 @@ def TFIDFQuestion(question: list, folderAddr: str):
     IDF = IDFCalculator(folderAddr)
 
     TFIDFList = []
-    for word in TF.keys():
+    for word in IDF.keys():
         TFIDFList.append(TF[word] * IDF[word])
-    return TFIDFList
+    return TFIDFList, list(IDF.keys())
 
 
-print(
-    tokenQuestion(
-        "Peux-tu me dire comment une nation peut-elle prendre soin du climat ?"
-    )[0]
-)
+def TFIDFListPart2(folderAddr: str = "./cleaned/"):
+    """
+    This function calculates the TF-IDF for each unique word across all text files in a given folder.
+    The TF-IDF is the product of the TF and the IDF.
 
-print(
-    searchInteristingTerms(
-        tokenQuestion(
-            "Peux-tu me dire comment une nation peut-elle prendre soin du climat ?"
-        )[0],
-        "./cleaned/",
-    )
-)
+    Parameters:
+    folderAddr (str): The path to the folder containing the text files. Defaults to "./cleaned/".
+
+    Returns:
+    TFIDF (list): A 2D list where each sublist corresponds to a unique word and contains the TF-IDF values for that word across all files.
+    IDF.keys() (list): A list of all unique words.
+    """
+
+    TFIDF = []
+    TFTab = (
+        []
+    )  # Create a list wich will be filled with dictionary using the TFCalculator function
+    IDF = IDFCalculator(folderAddr)
+    for fileName in os.listdir(folderAddr):  # Iterate though the files in the folder
+        TFTab.append(TFCalculator(open(folderAddr + fileName, "r").read()))
+    i = 0
+    for numberOfFiles in range(len(os.listdir(folderAddr))):
+        TFIDF.append([])
+        for key in IDF.keys():
+            if (
+                key in TFTab[numberOfFiles].keys()
+            ):  # Check if the word is in the TF dictionary
+                TFIDF[i].append(IDF[key] * TFTab[numberOfFiles][key])
+            else:
+                TFIDF[i].append(None)
+        i += 1
+    return TFIDF, list(
+        IDF.keys()
+    )  # Return the TF-IDF list and the list of each unique words
+
+
+# print(TFIDFListPart2())
+
+
+def produitScalaire(list1, list2):
+    somme = 0
+    for i in range(len(list1)):
+        if list1[i] != None and list2[i] != None:
+            somme += list1[i] * list2[i]
+    return somme
+
+
+def normeVecteur(list):
+    normeSomme = 0
+    for _ in list:
+        if _ != None:
+            normeSomme += _**2
+    return math.sqrt(normeSomme)
+
+
+def calculSimilarité(list1, list2):
+    return produitScalaire(list1, list2) / (normeVecteur(list1) * normeVecteur(list2))
+
+
+def bestDocument(TFIDFCorpus, TFIDFQuestion):
+    max = 0
+    maxIndex = 0
+    for i in range(len(os.listdir("./cleaned/"))):
+        temp = calculSimilarité(TFIDFQuestion, TFIDFCorpus[i])
+        if temp >= max:
+            maxIndex = i
+            max = temp
+    return os.listdir("./cleaned/")[maxIndex]
+
+
+def getMaxTFIDFQuestion(TFIDFQuestion, listQuestion):
+    return listQuestion[TFIDFQuestion.index(max(TFIDFQuestion))]
+
+
+def getSentence(maxTFIDFQuestion, bestDocument):
+    file = open("./speeches/" + bestDocument, "r")
+    sentences = file.read().split(".")
+    for sentence in sentences:
+        if maxTFIDFQuestion in sentence:
+            return sentence
+
+
+def betterAnswer(answer, question):
+    question_starters = {
+        "Comment": "Après analyse, ",
+        "Pourquoi": "Car, ",
+        "Peux-tu": "Oui, bien sûr!",
+    }
+
+    firstQuestionWord = question.split()[0]
+    if answer != None:
+        answer = answer.replace("\n", "")
+    else:
+        return "Il n'y a pas de réponse à votre question dans les textes données...."
+    if firstQuestionWord in question_starters:
+        return (question_starters[firstQuestionWord] + answer.lower() + ".")
+    else:
+        return (answer + ".")
+
+
+question = input("Saisir la question : ")
+
+# print(tokenQuestion(question)[0])
+
+# print(
+#     searchInteristingTerms(
+#         tokenQuestion(question)[0],
+#         "./cleaned/",
+#     )
+# )
 
 # print(
 #     TFQuestion(
 #         tokenQuestion(
-#             "Peux-tu me dire comment une nation peut-elle prendre soin du climat ?"
+#             question
 #         )[1],
 #         "./cleaned/",
 #     )
 # )
 
+# print(
+#     TFIDFQuestion(
+#         tokenQuestion(question)[1],
+#         "./cleaned/",
+#     )
+# )
+
+# print(
+#     bestDocument(
+#         TFIDFListPart2()[0],
+#         TFIDFQuestion(
+#             tokenQuestion(question)[1],
+#             "./cleaned/",
+#         )[0],
+#     )
+# )
+
+# print(
+#     getMaxTFIDFQuestion(
+#         TFIDFQuestion(
+#             tokenQuestion(question)[1],
+#             "./cleaned/",
+#         )[0],
+#         TFIDFQuestion(
+#             tokenQuestion(question)[1],
+#             "./cleaned/",
+#         )[1],
+#     )
+# )
+
 print(
-    TFIDFQuestion(
-        tokenQuestion(
-            "Peux-tu me dire comment une nation peut-elle prendre soin du climat ?"
-        )[1],
-        "./cleaned/",
+    betterAnswer(
+        getSentence(
+            getMaxTFIDFQuestion(
+                TFIDFQuestion(
+                    tokenQuestion(question)[1],
+                    "./cleaned/",
+                )[0],
+                TFIDFQuestion(
+                    tokenQuestion(question)[1],
+                    "./cleaned/",
+                )[1],
+            ),
+            bestDocument(
+                TFIDFListPart2()[0],
+                TFIDFQuestion(
+                    tokenQuestion(question)[1],
+                    "./cleaned/",
+                )[0],
+            ),
+        ),
+        question,
     )
 )
