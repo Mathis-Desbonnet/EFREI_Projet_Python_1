@@ -164,7 +164,7 @@ def betterAnswer(answer, question):
         return (answer + ".")
 
 
-question = input("Saisir la question : ")
+# question = input("Saisir la question : ")
 
 # print(tokenQuestion(question)[0])
 
@@ -214,28 +214,28 @@ question = input("Saisir la question : ")
 #     )
 # )
 
-print(
-    betterAnswer(
-        getSentence(
-            getMaxTFIDFQuestion(
-                TFIDFQuestion(
-                    tokenQuestion(question)[1],
-                    "./speeches_cleaned/",
-                )[0],
-                TFIDFQuestion(
-                    tokenQuestion(question)[1],
-                    "./speeches_cleaned/",
-                )[1],
-            ),
-            bestDocument(
-                TFIDFListPart2("./speeches_cleaned/")[0],
-                TFIDFQuestion(
-                    tokenQuestion(question)[1],
-                    "./speeches_cleaned/",
-                )[0],
-                "./speeches_cleaned"
-            ),
-        ),
-        question,
-    )
-)
+# print(
+#     betterAnswer(
+#         getSentence(
+#             getMaxTFIDFQuestion(
+#                 TFIDFQuestion(
+#                     tokenQuestion(question)[1],
+#                     "./speeches_cleaned/",
+#                 )[0],
+#                 TFIDFQuestion(
+#                     tokenQuestion(question)[1],
+#                     "./speeches_cleaned/",
+#                 )[1],
+#             ),
+#             bestDocument(
+#                 TFIDFListPart2("./speeches_cleaned/")[0],
+#                 TFIDFQuestion(
+#                     tokenQuestion(question)[1],
+#                     "./speeches_cleaned/",
+#                 )[0],
+#                 "./speeches_cleaned"
+#             ),
+#         ),
+#         question,
+#     )
+# )

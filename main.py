@@ -1,5 +1,6 @@
 import PySimpleGUI as sg # Import the library wich will be used to create the GUI.
 import os
+import shutil
 from fonctions import deletePonctuationSign, cleanPresidentText
 import TF_IDF_functions as tfidf
 import other_functions as of
@@ -16,29 +17,24 @@ functionsList = [ # Create a list of all the functions the user can use.
     "universalWords",
 ]
 
-themesList = [ # Create a list of all the functions the user can use.
-    "Pas de thème particulier",
-    "Pas de pauvreté",
-    "Faim zéro",
-    "Bonne santé",
-    "Éducation",
-    "Égalité des sexes",
-    "Eau propre",
-    "Énergie propre",
-    "Travail décent",
-    "Industrie et innovation",
-    "Inégalités réduites",
-    "Villes durables",
-    "Consommation responsable",
-    "Changement climatique",
-    "Vie aquatique",
-    "Vie terrestre",
-    "Paix et justice"
-]
-
-themeOfEachText = { # Create a dictionary wich associate each text to a theme
-    "theme1" : [],
-    "theme2" : []
+themesList = { # Create a dictionary wich associate each text to a theme
+    "Pas de thème particulier" : None,
+    "Pas de pauvreté" : ["pauvretéSénégal.txt", "réductionPauvreté.txt"],
+    "Faim zéro" : ["agricultureUrbaine.txt", "enjeuxAlimentaire.txt", ],
+    "Bonne santé" : ["réductionPauvreté.txt", ],
+    "Éducation" : [],
+    "Égalité des sexes" : ["égalitéDesSexes.txt"],
+    "Eau propre" : [],
+    "Énergie propre" : [],
+    "Travail décent" : [],
+    "Industrie et innovation" : [],
+    "Inégalités réduites" : [],
+    "Villes durables" : [],
+    "Consommation responsable" : [],
+    "Changement climatique" : [],
+    "Vie aquatique" : [],
+    "Vie terrestre" : [],
+    "Paix et justice" : []
 }
 
 
@@ -65,7 +61,7 @@ def firstWindow(run, window): # Create the first window (the one where the user 
         if event in ("Change Mode") :
             if mode == "Functions mode" :
                 mode = "Chatbot mode"
-                window['FunctionInput'].update(values=themesList)
+                window['FunctionInput'].update(values=list(themesList.keys()))
             else :
                 mode = "Functions mode"
                 window['FunctionInput'].update(values=functionsList)
@@ -166,30 +162,42 @@ def secondWindow(run, window, layout, Output, path, pathCleaned, functions, tfid
                 case "universalWords":
                     output = of.universalWords(tfidfWords, irrelevants, pathCleaned)
 
-                case "Pas de thème particulier":
+                case _ :
+                    if functions != "Pas de thème particulier":
+                        try : os.mkdir("./theme_texts") # Create the output folder if it does not exist
+                        except FileExistsError: pass
+
+                        for i in range(len(themesList[functions])):
+                            shutil.move("./speeches_cleaned/" + themesList[functions][i], "./theme_texts")
+                        directory = "./theme_texts/"
+
+                    else : directory = pathCleaned
                     output = chatBot.betterAnswer(
                         chatBot.getSentence(
                             chatBot.getMaxTFIDFQuestion(
                                 chatBot.TFIDFQuestion(
                                     chatBot.tokenQuestion(argument)[1],
-                                    pathCleaned,
+                                    directory,
                                 )[0],
                                 chatBot.TFIDFQuestion(
                                     chatBot.tokenQuestion(argument)[1],
-                                    pathCleaned,
+                                    directory,
                                 )[1],
                             ),
                             chatBot.bestDocument(
-                                chatBot.TFIDFListPart2(pathCleaned)[0],
+                                chatBot.TFIDFListPart2(directory)[0],
                                 chatBot.TFIDFQuestion(
                                     chatBot.tokenQuestion(argument)[1],
-                                    pathCleaned,
+                                    directory,
                                 )[0],
-                                pathCleaned
+                                directory
                             ),
                         ),
                         argument
                     )
+                    for i in range(len(themesList[functions])):
+                        shutil.move("./theme_texts/" + themesList[functions][i], "./speeches_cleaned")       
+                        
 
             Output.Update("")
             if type(output) == list: # Iterate tough the output if it's a list to display it in the output box.
