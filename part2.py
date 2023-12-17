@@ -140,8 +140,8 @@ def getMaxTFIDFQuestion(TFIDFQuestion, listQuestion):
     return listQuestion[TFIDFQuestion.index(max(TFIDFQuestion))]
 
 
-def getSentence(maxTFIDFQuestion, bestDocument):
-    file = open("./speeches/" + bestDocument, "r", encoding="utf-8")
+def getSentence(maxTFIDFQuestion, bestDocument, path):
+    file = open(path + bestDocument, "r")
     sentences = file.read().split(".")
     for sentence in sentences:
         if maxTFIDFQuestion in sentence:

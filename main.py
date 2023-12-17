@@ -182,7 +182,7 @@ def secondWindow(run, window, layout, Output, path, pathCleaned, functions, tfid
                                 chatBot.TFIDFQuestion(
                                     chatBot.tokenQuestion(argument)[1],
                                     directory,
-                                )[1],
+                                )[1]
                             ),
                             chatBot.bestDocument(
                                 chatBot.TFIDFListPart2(directory)[0],
@@ -192,6 +192,7 @@ def secondWindow(run, window, layout, Output, path, pathCleaned, functions, tfid
                                 )[0],
                                 directory
                             ),
+                            pathCleaned
                         ),
                         argument
                     )
