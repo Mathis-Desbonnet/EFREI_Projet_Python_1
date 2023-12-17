@@ -19,22 +19,22 @@ functionsList = [ # Create a list of all the functions the user can use.
 
 themesList = { # Create a dictionary wich associate each text to a theme
     "Pas de thème particulier" : None,
-    "Pas de pauvreté" : ["pauvretéSénégal.txt", "réductionPauvreté.txt"],
-    "Faim zéro" : ["agricultureUrbaine.txt", "enjeuxAlimentaire.txt", ],
-    "Bonne santé" : ["réductionPauvreté.txt", ],
-    "Éducation" : [],
-    "Égalité des sexes" : ["égalitéDesSexes.txt"],
-    "Eau propre" : [],
-    "Énergie propre" : [],
-    "Travail décent" : [],
-    "Industrie et innovation" : [],
-    "Inégalités réduites" : [],
-    "Villes durables" : [],
-    "Consommation responsable" : [],
-    "Changement climatique" : [],
-    "Vie aquatique" : [],
-    "Vie terrestre" : [],
-    "Paix et justice" : []
+    "Pas de pauvreté" : ["pauvretéSénégal.txt", "réductionPauvreté.txt", "pêcheursTierMonde.txt"],
+    "Faim zéro" : ["agricultureUrbaine.txt", "enjeuxAlimentaire.txt", "produitsDeLaMer.txt"],
+    "Bonne santé" : ["réductionPauvreté.txt", "santéMondiale.txt"],
+    "Éducation" : ["éducationPrioritaire.txt", "dépenseEducation.txt", "objectifEducation.txt"],
+    "Égalité des sexes" : ["égalitéDesSexes.txt", "ObjectifEducation.txt", "organisationsFeminines.txt"],
+    "Eau propre" : ["accèsEauPotable.txt", "polutionEaux.txt"],
+    "Énergie propre" : ["villesEnTransition.txt", "énergieAbordable.txt", "nucléaire.txt"],
+    "Travail décent" : ["qualitéEmploi.txt", "travailDécent.txt"],
+    "Industrie et innovation" : ["relocalisation.txt", "nucléaire.txt"],
+    "Inégalités réduites" : ["éducationPrioritaire.txt", "accèsEauPotable.txt", "énergieAbordable.txt"],
+    "Villes durables" : ["afriqueDurable.txt", "villeDurable.txt", "villesEnTransition.txt"],
+    "Consommation responsable" : ["écoblanchiment.txt", "multinationales.txt", "surpêche.txt"],
+    "Changement climatique" : ["changementClimatique.txt", "mobilisationClimatique.txt", "villesEnTransitions.txt"],
+    "Vie aquatique" : ["pêcheursTierMonde.txt", "surpêche.txt"],
+    "Vie terrestre" : ["mondeFongique.txt", "forêts.txt"],
+    "Paix et justice" : ["organisationFeminines.txt", "fragilitéPaixJustice.txt"]
 }
 
 
@@ -83,7 +83,7 @@ def firstWindow(run, window): # Create the first window (the one where the user 
                 window.close()
                 ErrorWindow(True, window3)
             else:
-                if mode == "Functions Mode" :
+                if mode == "Functions mode" :
                     if values["FunctionInput"] in ["whoTalkAbout", "firstToSay", "mostUsedWords"]:
                         layout2 = [ # Create the second window with an input box for the argument if the function the user wish to use require one.
                             [sg.InputText(size=(20, 1), k="ArgumentInput"), sg.Text("Enter the arguments")],
@@ -195,8 +195,9 @@ def secondWindow(run, window, layout, Output, path, pathCleaned, functions, tfid
                         ),
                         argument
                     )
-                    for i in range(len(themesList[functions])):
-                        shutil.move("./theme_texts/" + themesList[functions][i], "./speeches_cleaned")       
+                    if functions != "Pas de thème particulier" :
+                        for i in range(len(themesList[functions])):
+                            shutil.move("./theme_texts/" + themesList[functions][i], "./speeches_cleaned")       
                         
 
             Output.Update("")

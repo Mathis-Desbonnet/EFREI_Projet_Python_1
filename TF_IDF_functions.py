@@ -73,7 +73,8 @@ def IDFCalculator(folderAddr: str = "./cleaned/"):
 
     IDF = {}
     while allWords != []:
-        word = allWords[0][0]
+        try : word = allWords[0][0]
+        except IndexError : var = False
         IDF[word] = 1
         for index in range(1, len(allWords)):
             if (

@@ -79,6 +79,7 @@ def cleanPresidentText(speechFolderIn: str = "./speeches/"):
     except FileExistsError: pass
     file = os.listdir(speechFolderIn) # Get a list of all file names in the specified folder
     for fileName in file:
+        print(fileName)
         if ".txt" in fileName: # Check if the file is a text file
             fileIn = open(speechFolderIn + fileName, "r")
             fileOut = open(speechFolderIn[:-1] + "_cleaned/" + fileName, "w")
