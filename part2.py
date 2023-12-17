@@ -24,7 +24,7 @@ def getFilesWords(folderAddr: str):
     files = os.listdir(folderAddr)
     allWords = []
     for _ in files:
-        text = open(folderAddr + _, "r").read()
+        text = open(folderAddr + _, "r", encoding="utf-8").read()
         allWords += text.split()
         allWords = list(set(allWords))
     return allWords
@@ -83,7 +83,9 @@ def TFIDFListPart2(folderAddr: str = "./cleaned/"):
     )  # Create a list wich will be filled with dictionary using the TFCalculator function
     IDF = IDFCalculator(folderAddr)
     for fileName in os.listdir(folderAddr):  # Iterate though the files in the folder
-        TFTab.append(TFCalculator(open(folderAddr + fileName, "r").read()))
+        TFTab.append(
+            TFCalculator(open(folderAddr + fileName, "r", encoding="utf-8").read())
+        )
     i = 0
     for numberOfFiles in range(len(os.listdir(folderAddr))):
         TFIDF.append([])
@@ -139,7 +141,7 @@ def getMaxTFIDFQuestion(TFIDFQuestion, listQuestion):
 
 
 def getSentence(maxTFIDFQuestion, bestDocument):
-    file = open("./speeches/" + bestDocument, "r")
+    file = open("./speeches/" + bestDocument, "r", encoding="utf-8")
     sentences = file.read().split(".")
     for sentence in sentences:
         if maxTFIDFQuestion in sentence:
@@ -150,7 +152,7 @@ def betterAnswer(answer, question):
     question_starters = {
         "Comment": "Après analyse, ",
         "Pourquoi": "Car, ",
-        "Peux-tu": "Oui, bien sûr!",
+        "Peux-tu": "Oui, bien sûr! ",
     }
 
     firstQuestionWord = question.split()[0]
@@ -159,9 +161,9 @@ def betterAnswer(answer, question):
     else:
         return "Il n'y a pas de réponse à votre question dans les textes données...."
     if firstQuestionWord in question_starters:
-        return (question_starters[firstQuestionWord] + answer.lower() + ".")
+        return question_starters[firstQuestionWord] + answer.lower() + "."
     else:
-        return (answer + ".")
+        return answer + "."
 
 
 # question = input("Saisir la question : ")

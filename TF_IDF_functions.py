@@ -66,15 +66,17 @@ def IDFCalculator(folderAddr: str = "./cleaned/"):
     )  # Get a list of all file names in the specified folder
     allWords = []
     for name in filesName:  # Iterate though the files in the folder
-        speechFile = open(folderAddr + name)
+        speechFile = open(folderAddr + name, encoding="utf-8")
         text = speechFile.read()
         words = list(set(text.split()))  # Put unique words of the text in a list
         allWords.append(words)
 
     IDF = {}
     while allWords != []:
-        try : word = allWords[0][0]
-        except IndexError : var = False
+        try:
+            word = allWords[0][0]
+        except IndexError:
+            var = False
         IDF[word] = 1
         for index in range(1, len(allWords)):
             if (
@@ -118,7 +120,9 @@ def TFIDFList(folderAddr: str = "./cleaned/"):
     )  # Create a list wich will be filled with dictionary using the TFCalculator function
     IDF = IDFCalculator(folderAddr)
     for fileName in os.listdir(folderAddr):  # Iterate though the files in the folder
-        TFTab.append(TFCalculator(open(folderAddr + fileName, "r").read()))
+        TFTab.append(
+            TFCalculator(open(folderAddr + fileName, "r", encoding="utf-8").read())
+        )
     i = 0
     for key in IDF.keys():  # Iterate though the words in the IDF dictionary
         TFIDF.append([])

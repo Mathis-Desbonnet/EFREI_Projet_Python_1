@@ -21,11 +21,13 @@ def irrelevantWords(matrice: list, wordsList: list):
         word = matrice[i]
         isIrrelevant = True
         nbr = 0
-        while (nbr < len(word)) and isIrrelevant: 
-            if word[nbr] != 0: # Check if the word has a TF-IDF of 0.
-                isIrrelevant = False # Mark the word as not irrelevant.
+        while (nbr < len(word)) and isIrrelevant:
+            if word[nbr] != 0:  # Check if the word has a TF-IDF of 0.
+                isIrrelevant = False  # Mark the word as not irrelevant.
             nbr += 1
-        irrelevants += [wordsList[i]]*isIrrelevant # Add the word into the irrelevants if isIrrelevant is True.
+        irrelevants += [
+            wordsList[i]
+        ] * isIrrelevant  # Add the word into the irrelevants if isIrrelevant is True.
     return irrelevants
 
 
@@ -44,22 +46,30 @@ def importantWords(matrice: list, wordsList: list):
 
     maxTFIDF = 0
     wordsAndTFIDFScore = {}
-    for i in range(len(matrice)): # Determine the highest TF-IDF value among the given values in "matrice".
+    for i in range(
+        len(matrice)
+    ):  # Determine the highest TF-IDF value among the given values in "matrice".
         maxTFIDFperWords = 0
         for j in range(len(matrice[i])):
-            if matrice[i][j] != None and matrice[i][j] > maxTFIDFperWords: # Search the highest TF-IDF of the word across all the text.
+            if (
+                matrice[i][j] != None and matrice[i][j] > maxTFIDFperWords
+            ):  # Search the highest TF-IDF of the word across all the text.
                 maxTFIDFperWords = matrice[i][j]
-        wordsAndTFIDFScore[wordsList[i]] = maxTFIDFperWords # Match a word with his highest TF-IDF value in a dictionary.
+        wordsAndTFIDFScore[
+            wordsList[i]
+        ] = maxTFIDFperWords  # Match a word with his highest TF-IDF value in a dictionary.
         if maxTFIDF < maxTFIDFperWords:
-            maxTFIDF = maxTFIDFperWords # Update the highest TF-IDF value across all the words if a higher value is found.
+            maxTFIDF = maxTFIDFperWords  # Update the highest TF-IDF value across all the words if a higher value is found.
     betterWords = []
     for key in wordsAndTFIDFScore.keys():
-        if wordsAndTFIDFScore[key] == maxTFIDF: # Check if the highest TF-IDF of each word is equal to the highest TF-IDF.
+        if (
+            wordsAndTFIDFScore[key] == maxTFIDF
+        ):  # Check if the highest TF-IDF of each word is equal to the highest TF-IDF.
             betterWords.append(key)
     return betterWords
 
 
-def listOfWords(president : str, irrelevants : list, folderAddr : str) :
+def listOfWords(president: str, irrelevants: list, folderAddr: str):
     """
     This function returns a list of unique words used by a specified president, excluding a given list of irrelevant words.
     The function reads the text files from a given folder, splits the text into words, and filters out the irrelevant words.
@@ -74,15 +84,20 @@ def listOfWords(president : str, irrelevants : list, folderAddr : str) :
     relevantUsedWords (list): A list of the relevant words used by the president.
     """
 
-    relevantUsedWords = [] 
-    for fileName in os.listdir(folderAddr): # Iterate tough the files wich are in folderAddr
-        if president in fileName :
-            text = open(folderAddr + fileName, "r").read()
-            allUsedWords = list(set(text.split())) # Put unique words of the text in a list
-            for keys in allUsedWords :
-                if keys not in irrelevants : # Check if the word is not relevant
-                        relevantUsedWords.append(keys)
+    relevantUsedWords = []
+    for fileName in os.listdir(
+        folderAddr
+    ):  # Iterate tough the files wich are in folderAddr
+        if president in fileName:
+            text = open(folderAddr + fileName, "r", encoding="utf-8").read()
+            allUsedWords = list(
+                set(text.split())
+            )  # Put unique words of the text in a list
+            for keys in allUsedWords:
+                if keys not in irrelevants:  # Check if the word is not relevant
+                    relevantUsedWords.append(keys)
     return relevantUsedWords
+
 
 def mostUsedWords(president: str, irrelevants: list, folderAddr: str = "./cleaned/"):
     """
@@ -99,16 +114,30 @@ def mostUsedWords(president: str, irrelevants: list, folderAddr: str = "./cleane
     mostUsedWords (list): A list of the most frequently used words by the president, separated by newlines.
     """
 
-    presidentWordsList = listOfWords(president, irrelevants, folderAddr) # Create a list of all the words used by the given president.
+    presidentWordsList = listOfWords(
+        president, irrelevants, folderAddr
+    )  # Create a list of all the words used by the given president.
     occurences = {}
-    for word in presidentWordsList: 
+    for word in presidentWordsList:
         nbr = 0
-        for fileName in os.listdir(folderAddr): # Iterate tough the files in folderAddr
-            if president in fileName :
-                nbr += occurrenceOfWords(open(folderAddr + fileName, "r").read(), word)
+        for fileName in os.listdir(folderAddr):  # Iterate tough the files in folderAddr
+            if president in fileName:
+                nbr += occurrenceOfWords(
+                    open(folderAddr + fileName, "r", encoding="utf-8").read(), word
+                )
         occurences[word] = nbr
-    sortedOccurences = sorted(occurences.items(), key=lambda x: x[1], reverse=True) # Sort the words with their occurences.
-    mostUsedWords = list(map(lambda x : x[0], sortedOccurences[:10])) # Create a list withe the names of the 10 words with the highest TF-IDF values.
+    sortedOccurences = sorted(
+        occurences.items(), key=lambda x: x[1], reverse=True
+    )  # Sort the words with their occurences.
+    mostUsedWords = []
+    maxi = sortedOccurences[0][1]
+    continueLoop = True
+    _ = 0
+    while _ <= len(sortedOccurences) and continueLoop:
+        mostUsedWords.append(sortedOccurences[_][0])
+        _ += 1
+        if sortedOccurences[_][1] < maxi:
+            continueLoop = False
     return mostUsedWords
 
 
@@ -126,30 +155,42 @@ def whoTalkAbout(word: str, irrelevants: list, folderAddr: str = "./cleaned/"):
     hasTalkAbout (list): A list of the names of the presidents who talked about the chosen word, and the name of the president who has talked the most about it.
     """
 
-    namesList = getPresidentNames() # Get a list of all president's names.
+    namesList = getPresidentNames()  # Get a list of all president's names.
     presidentsList = []
-    for name in namesList: # Remove the duplicates of namesList
+    for name in namesList:  # Remove the duplicates of namesList
         if not name in presidentsList:
             presidentsList.append(name)
     hasTalkAbout = []
-    maxi = ["", 0] # Create a list wich contain the name of the president who has talked the most about the word and the number of time he said the word.
+    maxi = [
+        "",
+        0,
+    ]  # Create a list wich contain the name of the president who has talked the most about the word and the number of time he said the word.
     for president in presidentsList:
-        presidentWordsList = listOfWords(president, irrelevants, folderAddr) # Create a list of all the words used by the given president.
+        presidentWordsList = listOfWords(
+            president, irrelevants, folderAddr
+        )  # Create a list of all the words used by the given president.
         if word in presidentWordsList:
             hasTalkAbout.append(president)
             occurences = 0
             for fileName in os.listdir(folderAddr):
-                if president in fileName :
-                    occurences += occurrenceOfWords(open(folderAddr + fileName, "r").read(), word)
-            if maxi[1] < occurences: # Check if this president has talked more about this word than the president stored in "maxi"
+                if president in fileName:
+                    occurences += occurrenceOfWords(
+                        open(folderAddr + fileName, "r", encoding="utf-8").read(), word
+                    )
+            if (
+                maxi[1] < occurences
+            ):  # Check if this president has talked more about this word than the president stored in "maxi"
                 maxi = [president, occurences]
-    if hasTalkAbout == []: # Check if nobody has talked about this word.
+    if hasTalkAbout == []:  # Check if nobody has talked about this word.
         hasTalkAbout = "Nobody talked about this word..."
-    else : hasTalkAbout.append("The president who talked the most about is : " + maxi[0]) # Add the name of the president who has talked the most about this word.
+    else:
+        hasTalkAbout.append(
+            "The president who talked the most about is : " + maxi[0]
+        )  # Add the name of the president who has talked the most about this word.
     return hasTalkAbout
 
 
-def firstToSay(words: list, irrelevants : list, folderAddr : str):
+def firstToSay(words: list, irrelevants: list, folderAddr: str):
     """
     This function returns the name of the president who first talked about at least one of the given words.
     The function use listOfWords() to get the list of relevant words used by each president.
@@ -163,7 +204,7 @@ def firstToSay(words: list, irrelevants : list, folderAddr : str):
     president (str): The name of the president who first talked about the given words.
     """
 
-    chronology = [ # Create a list filled with the presidents names sorted by chronological order.
+    chronology = [  # Create a list filled with the presidents names sorted by chronological order.
         "De Gaulle",
         "Pompidou",
         "Giscard",
@@ -173,15 +214,17 @@ def firstToSay(words: list, irrelevants : list, folderAddr : str):
         "Hollande",
         "Macron",
     ]
-    for president in chronology: # Iterate tough the president list.
+    for president in chronology:  # Iterate tough the president list.
         presidentWordsList = listOfWords(president, irrelevants, folderAddr)
         for word in words:
-            if word in presidentWordsList: # Check if the president has talk about one of the words.
+            if (
+                word in presidentWordsList
+            ):  # Check if the president has talk about one of the words.
                 return president
     return "Nobody talked about this word or maybe it's an irrelevant one..."
 
 
-def universalWords(wordsList: list, irrelevants : list, folderAddr: str = "./cleaned/"):
+def universalWords(wordsList: list, irrelevants: list, folderAddr: str = "./cleaned/"):
     """
     This function returns a list which contains the words used by all the presidents, excluding a given list of irrelevant words.
     The function use listOfWords() to get the list of relevant words used by each president.
@@ -196,19 +239,26 @@ def universalWords(wordsList: list, irrelevants : list, folderAddr: str = "./cle
     universals (list): A list of the words used by all the presidents.
     """
     universals = []
-    namesList = getPresidentNames() # Get a list of all president's names.
-    presidentWordsList = [] # A list wich will contain all the words used by all the presidents
+    namesList = getPresidentNames()  # Get a list of all president's names.
+    presidentWordsList = (
+        []
+    )  # A list wich will contain all the words used by all the presidents
     for president in namesList:
-        presidentWordsList.append(listOfWords(president, irrelevants, folderAddr)) # Create a list of all the words used by the given president.
+        presidentWordsList.append(
+            listOfWords(president, irrelevants, folderAddr)
+        )  # Create a list of all the words used by the given president.
     for word in wordsList:
         isUniversal = True
         counter = 0
-        while isUniversal and counter < len(presidentWordsList) :
+        while isUniversal and counter < len(presidentWordsList):
             president = presidentWordsList[counter]
-            if not word in president :
+            if not word in president:
                 isUniversal = False
             counter += 1
-        universals += [word]*isUniversal # Add the word into universals if isUniversal is True.
-    if universals == [] :
+        universals += [
+            word
+        ] * isUniversal  # Add the word into universals if isUniversal is True.
+    if universals == []:
         return ["No important word has been used by all the presidents."]
-    else : return universals
+    else:
+        return universals
