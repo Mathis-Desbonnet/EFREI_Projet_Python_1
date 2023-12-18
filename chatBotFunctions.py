@@ -28,7 +28,7 @@ def tokenQuestion(question: str):
     )
     question = question.lower() # Convert question's uppercases into lowercases
     token = list(set(question.split())), question.split()
-    return  # return the list of each unique word of the cleaned question.
+    return token # return the list of each unique word of the cleaned question.
 
 
 def getFilesWords(folderAddr: str):
@@ -157,8 +157,6 @@ def TFIDFListPart2(folderAddr: str = "./cleaned/"):
     )  # Return the TF-IDF list and the list of each unique words
 
 
-# print(TFIDFListPart2())
-
 
 def produitScalaire(list1, list2):
     """
@@ -192,15 +190,16 @@ def normeVecteur(list):
     """
     
     normeSomme = 0
-    for _ in list:
-        if _ != None:
-            normeSomme += _**2
+    for value in list:
+        if value != None:
+            normeSomme += value**2
     return math.sqrt(normeSomme)
 
 
 def calculSimilarité(list1, list2):
     """
     This function calculates and returns the cosine similarity between two vectors.
+    If the denominator is 0 (Wich will return as an error), it return 100 to show the importance of the word.
 
     Parameters:
     list1 (list): The first vector.
@@ -210,8 +209,10 @@ def calculSimilarité(list1, list2):
     similarity (float): The cosine similarity between the two vectors.
     """
 
-    similarity = produitScalaire(list1, list2) / (normeVecteur(list1) * normeVecteur(list2))
-    return similarity
+    if (normeVecteur(list1) * normeVecteur(list2)) != 0 :
+        similarity = produitScalaire(list1, list2) / (normeVecteur(list1) * normeVecteur(list2))
+        return similarity
+    else : return 100
 
 
 def bestDocument(TFIDFCorpus, TFIDFQuestion, folderAddr):
@@ -234,7 +235,6 @@ def bestDocument(TFIDFCorpus, TFIDFQuestion, folderAddr):
         if temp >= max:
             maxIndex = i
             max = temp
-    print(os.listdir(folderAddr)[maxIndex])
     return os.listdir(folderAddr)[maxIndex]
 
 
@@ -267,7 +267,6 @@ def getSentence(maxTFIDFQuestion, bestDocument, path):
     sentence (str): The sentence that contains the word with the highest TF-IDF score.
     """
 
-    print(maxTFIDFQuestion)
     file = open(path + bestDocument, "r", encoding="utf-8")
     sentences = file.read().split(".") # Split the text into a list of sentences
     for sentence in sentences:

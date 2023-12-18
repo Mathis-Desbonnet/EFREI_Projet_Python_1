@@ -95,7 +95,6 @@ def cleanPresidentText(speechFolderIn: str = "./speeches/"):
         speechFolderIn
     )  # Get a list of all file names in the specified folder
     for fileName in file:
-        print(fileName)
         if ".txt" in fileName:  # Check if the file is a text file
             fileIn = open(speechFolderIn + fileName, "r", encoding="utf-8")
             fileOut = open(

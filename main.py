@@ -4,7 +4,7 @@ import shutil
 from fonctions import deletePonctuationSign, cleanPresidentText
 import TF_IDF_functions as tfidf
 import other_functions as of
-import part2 as chatBot
+import chatBotFunctions as chatBot
 
 
 sg.theme("DarkBlue12")
@@ -199,8 +199,9 @@ def secondWindow(run,window,layout,Output,path,pathCleaned,functions,tfidfScore,
                         except FileExistsError: pass
 
                         for i in range(len(themesList[functions])): # Move the texts associated to the chosen theme to another directory wich will be used instead of the main directory
+                            print(1)
                             shutil.move(
-                                "./speeches_cleaned/" + themesList[functions][i],
+                                pathCleaned + themesList[functions][i],
                                 "./theme_texts",
                             )
                         directory = "./theme_texts/"
@@ -235,7 +236,7 @@ def secondWindow(run,window,layout,Output,path,pathCleaned,functions,tfidfScore,
                         for i in range(len(themesList[functions])):
                             shutil.move(
                                 "./theme_texts/" + themesList[functions][i],
-                                "./speeches_cleaned",
+                                pathCleaned,
                             )
 
             Output.Update("")
