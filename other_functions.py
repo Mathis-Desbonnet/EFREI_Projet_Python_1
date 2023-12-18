@@ -129,15 +129,16 @@ def mostUsedWords(president: str, irrelevants: list, folderAddr: str = "./cleane
     sortedOccurences = sorted(
         occurences.items(), key=lambda x: x[1], reverse=True
     )  # Sort the words with their occurences.
-    mostUsedWords = []
-    maxi = sortedOccurences[0][1]
-    continueLoop = True
-    _ = 0
-    while _ <= len(sortedOccurences) and continueLoop:
-        mostUsedWords.append(sortedOccurences[_][0])
-        _ += 1
-        if sortedOccurences[_][1] < maxi:
-            continueLoop = False
+    mostUsedWords = list(map(lambda x: x[0], sortedOccurences[:10]))
+    # mostUsedWords = []
+    # maxi = sortedOccurences[0][1]
+    # continueLoop = True
+    # _ = 0
+    # while _ <= len(sortedOccurences) and continueLoop:
+    #     mostUsedWords.append(sortedOccurences[_][0])
+    #     _ += 1
+    #     if sortedOccurences[_][1] < maxi:
+    #         continueLoop = False
     return mostUsedWords
 
 

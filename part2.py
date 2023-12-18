@@ -61,6 +61,8 @@ def TFIDFQuestion(question: list, folderAddr: str):
     TFIDFList = []
     for word in IDF.keys():
         TFIDFList.append(TF[word] * IDF[word])
+    print(TFIDFList[list(IDF.keys()).index("climat")])
+    print(TFIDFList[list(IDF.keys()).index("pourquoi")])
     return TFIDFList, list(IDF.keys())
 
 
@@ -133,15 +135,20 @@ def bestDocument(TFIDFCorpus, TFIDFQuestion, folderAddr):
         if temp >= max:
             maxIndex = i
             max = temp
+    print(os.listdir(folderAddr)[maxIndex])
     return os.listdir(folderAddr)[maxIndex]
 
 
 def getMaxTFIDFQuestion(TFIDFQuestion, listQuestion):
+    print(max(TFIDFQuestion))
+    print(TFIDFQuestion.index(max(TFIDFQuestion)))
+    print(listQuestion[TFIDFQuestion.index(max(TFIDFQuestion))])
     return listQuestion[TFIDFQuestion.index(max(TFIDFQuestion))]
 
 
 def getSentence(maxTFIDFQuestion, bestDocument, path):
-    file = open(path + bestDocument, "r")
+    print(maxTFIDFQuestion)
+    file = open(path + bestDocument, "r", encoding="utf-8")
     sentences = file.read().split(".")
     for sentence in sentences:
         if maxTFIDFQuestion in sentence:
@@ -235,8 +242,9 @@ def betterAnswer(answer, question):
 #                     tokenQuestion(question)[1],
 #                     "./speeches_cleaned/",
 #                 )[0],
-#                 "./speeches_cleaned"
+#                 "./speeches_cleaned/",
 #             ),
+#             "./speeches/",
 #         ),
 #         question,
 #     )
