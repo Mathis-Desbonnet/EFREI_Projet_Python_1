@@ -4,7 +4,7 @@ import shutil
 from fonctions import deletePonctuationSign, cleanPresidentText
 import TF_IDF_functions as tfidf
 import other_functions as of
-import part2 as chatBot
+import chatBotFunctions as chatBot
 
 
 sg.theme("DarkBlue12")
@@ -17,60 +17,24 @@ functionsList = [  # Create a list of all the functions the user can use.
     "universalWords",
 ]
 
-themesList = {  # Create a dictionary wich associate each text to a theme
+themesList = {  # Create a dictionary wich associate each theme to a list of texts
     "Pas de thème particulier": None,
-    "Pas de pauvreté": [
-        "pauvretéSénégal.txt",
-        "réductionPauvreté.txt",
-        "pêcheursTierMonde.txt",
-    ],
-    "Faim zéro": [
-        "agricultureUrbaine.txt",
-        "enjeuxAlimentaire.txt",
-        "produitsDeLaMer.txt",
-    ],
+    "Pas de pauvreté": ["pauvretéSénégal.txt", "réductionPauvreté.txt", "pêcheursTierMonde.txt"],
+    "Faim zéro": ["agricultureUrbaine.txt", "enjeuxAlimentaire.txt", "produitsDeLaMer.txt"],
     "Bonne santé": ["réductionPauvreté.txt", "santéMondiale.txt"],
-    "Éducation": [
-        "éducationPrioritaire.txt",
-        "dépenseEducation.txt",
-        "objectifEducation.txt",
-    ],
-    "Égalité des sexes": [
-        "égalitéDesSexes.txt",
-        "ObjectifEducation.txt",
-        "organisationsFeminines.txt",
-    ],
+    "Éducation": ["éducationPrioritaire.txt", "dépenseEducation.txt", "objectifEducation.txt"],
+    "Égalité des sexes": ["égalitéDesSexes.txt", "ObjectifEducation.txt", "organisationsFeminines.txt"],
     "Eau propre": ["accèsEauPotable.txt", "polutionEaux.txt"],
-    "Énergie propre": [
-        "villesEnTransition.txt",
-        "énergieAbordable.txt",
-        "nucléaire.txt",
-    ],
+    "Énergie propre": ["villesEnTransition.txt", "énergieAbordable.txt", "nucléaire.txt"],
     "Travail décent": ["qualitéEmploi.txt", "travailDécent.txt"],
     "Industrie et innovation": ["relocalisation.txt", "nucléaire.txt"],
-    "Inégalités réduites": [
-        "éducationPrioritaire.txt",
-        "accèsEauPotable.txt",
-        "énergieAbordable.txt",
-    ],
-    "Villes durables": [
-        "afriqueDurable.txt",
-        "villeDurable.txt",
-        "villesEnTransition.txt",
-    ],
-    "Consommation responsable": [
-        "écoblanchiment.txt",
-        "multinationales.txt",
-        "surpêche.txt",
-    ],
-    "Changement climatique": [
-        "changementClimatique.txt",
-        "mobilisationClimatique.txt",
-        "villesEnTransitions.txt",
-    ],
+    "Inégalités réduites": ["éducationPrioritaire.txt", "accèsEauPotable.txt", "énergieAbordable.txt"],
+    "Villes durables": ["afriqueDurable.txt", "villeDurable.txt", "villesEnTransition.txt"],
+    "Consommation responsable": ["écoblanchiment.txt", "multinationales.txt", "surpêche.txt"],
+    "Changement climatique": ["changementClimatique.txt", "mobilisationClimatique.txt", "villesEnTransitions.txt"],
     "Vie aquatique": ["pêcheursTierMonde.txt", "surpêche.txt"],
     "Vie terrestre": ["mondeFongique.txt", "forêts.txt"],
-    "Paix et justice": ["organisationFeminines.txt", "fragilitéPaixJustice.txt"],
+    "Paix et justice": ["organisationFeminines.txt", "fragilitéPaixJustice.txt"]
 }
 
 
@@ -85,7 +49,7 @@ layout1 = [  # Create the layout of the first window.
         sg.Combo(functionsList, k="FunctionInput"),
         sg.Text("Choose the function"),
     ],  # Create the drop down list where the user will choose the function to use.
-    [sg.Button("Change Mode"), sg.Text("Functions mode", key="textMode")],
+    [sg.Button("Change Mode"), sg.Text("Functions mode", key="textMode")], # The button to switch between functions and chatBot mode and display the current mode.
     [sg.Button("Next Step")],  # Create the button to go to the second window.
 ]
 window1 = sg.Window("Main menu", layout1).Finalize()
@@ -104,13 +68,13 @@ def firstWindow(
         if event in ("Close Window"):  # Check if the user closed the window.
             run = False
 
-        if event in ("Change Mode"):
+        if event in ("Change Mode"): # Check if the user want to change the mode
             if mode == "Functions mode":
                 mode = "Chatbot mode"
-                window["FunctionInput"].update(values=list(themesList.keys()))
+                window["FunctionInput"].update(values=list(themesList.keys())) # Set the option's list to the list of themes
             else:
                 mode = "Functions mode"
-                window["FunctionInput"].update(values=functionsList)
+                window["FunctionInput"].update(values=functionsList) # Set the option's list to the list of functions.
             window["textMode"].update(mode)
 
         if (  # Check if the user has entered a path and a function before clicking on the "Next Step" button.
@@ -158,7 +122,7 @@ def firstWindow(
                             [sg.Button("Go"), sg.Push(), sg.Button("Previous")],
                         ]
                 else:
-                    layout2 = [  # Create the second window with an input box for the argument if the function the user wish to use require one.
+                    layout2 = [  # Create the second window with an input box for the question if the current mode if defined on "chatBot"
                         [sg.Multiline(size=(40, 20), disabled=True, key="Output")],
                         [sg.Text("Ask your question")],
                         [sg.InputText(size=(40, 1), k="ArgumentInput")],
@@ -201,18 +165,7 @@ def LoadingWindow(
         )
 
 
-def secondWindow(
-    run,
-    window,
-    layout,
-    Output,
-    path,
-    pathCleaned,
-    functions,
-    tfidfScore,
-    tfidfWords,
-    irrelevants,
-):
+def secondWindow(run,window,layout,Output,path,pathCleaned,functions,tfidfScore,tfidfWords,irrelevants):
     while run:
         event, values = window.read()
         if len(layout) >= 3:
@@ -237,25 +190,25 @@ def secondWindow(
                 case "universalWords":
                     output = of.universalWords(tfidfWords, irrelevants, pathCleaned)
 
-                case _:
+                case _: # 
                     if functions != "Pas de thème particulier":
                         try:
                             os.mkdir(
                                 "./theme_texts"
                             )  # Create the output folder if it does not exist
-                        except FileExistsError:
-                            pass
+                        except FileExistsError: pass
 
-                        for i in range(len(themesList[functions])):
+                        for i in range(len(themesList[functions])): # Move the texts associated to the chosen theme to another directory wich will be used instead of the main directory
+                            print(1)
                             shutil.move(
-                                "./speeches_cleaned/" + themesList[functions][i],
+                                pathCleaned + themesList[functions][i],
                                 "./theme_texts",
                             )
                         directory = "./theme_texts/"
 
                     else:
                         directory = pathCleaned
-                    output = chatBot.betterAnswer(
+                    output = chatBot.betterAnswer( # Create the awser to the asked question.
                         chatBot.getSentence(
                             chatBot.getMaxTFIDFQuestion(
                                 chatBot.TFIDFQuestion(
@@ -279,12 +232,11 @@ def secondWindow(
                         ),
                         argument,
                     )
-                    print(argument)
-                    if functions != "Pas de thème particulier":
+                    if functions != "Pas de thème particulier": # Replace moved text on the first directory for future uses.
                         for i in range(len(themesList[functions])):
                             shutil.move(
                                 "./theme_texts/" + themesList[functions][i],
-                                "./speeches_cleaned",
+                                pathCleaned,
                             )
 
             Output.Update("")
@@ -303,7 +255,7 @@ def secondWindow(
         ):  # Go back to the first window if the user click on the "Previous" button.
             run = False
             window.close()
-            layout1 = [
+            layout1 = [ # Recreate layout1 because we can't use an already used layout.
                 [
                     sg.InputText(size=(20, 1), default_text=path[2:-1], k="AddrInput"),
                     sg.Text("Enter the directory path"),
